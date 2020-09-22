@@ -6,3 +6,5 @@
 #### 玩家分數大於機器人代表勝利
 #### 玩家分數等於機器人代表平手
 #### 玩家分數小於機器人代表失敗
+## Demo
+https://laura-chou.github.io/turn_chess/
