@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="./images/icon.png">
+  <link rel="stylesheet" href="./css/bootstrap.min.css"> 
+  <link rel="stylesheet" href="./css/animate.min.css">
+  <link rel="stylesheet" href="./css/common.style.css">
+  <link rel="stylesheet" href="./css/index.style.css">
+  <title>象棋記憶大賽 V2</title>
+</head>
+<body onselectstart="return false">
+  <css-doodle id="doodle">
+    :doodle{
+      @grid:6 / 100vmax;
+    }
+    @size:@rand(15, 30)px;
+    background:url(images/@pick(bamboo).png);
+    background-size:cover;
+    background-repeat:no-repeat;
+
+    transform:rotate(@rand(0,360)deg);
+    position:absolute;
+    left: @rand(0, 100%);
+    top: -10%;
+
+    animation:bamboo 30s infinite @rand(0, 50)s;
+    @keyframes bamboo {
+      0% {
+        top:0;
+        left:@rand(-20, 100)%;
+        transform:rotate(@rand(1080,1800)deg);
+      }
+      100% {
+        top:100%;
+        left:@rand(0, 110)%;
+        transform:rotate(@rand(3600,7200)deg);  
+      }
+    }
+  </css-doodle>
+  <section>
+    <div class="title">
+      <img class="animate__animated animate__backInDown" src="./images/title.png">
+    </div>
+    <div class="action">
+      <h1 onclick="Start()">參加</h1>
+      <h1 onclick="Rank()">排行</h1>
+      <!-- <div>
+        <img src="./images/action2.PNG" onclick="Continue()">
+      </div> -->
+    </div>
+  </section>
+</body>
+<script src="./js/sweetalert2@11.js"></script>
+<script src="./js/css-doodle.min.js"></script>
+<script src="./js/popper.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script>
+  function Start() {
+    location.href = "html/player.html"
+  }
+  
+  function Rank() {
+      const html = `<div class="winner card">
+                      <img src="./images/player1.png" class="card-img-top">
+                      <div class="card-body">
+                        <h4 class="card-title">Name1</h4>
+                        <div class="card-text">
+                        <h3 class="card-text">10:00</h3>
+                          <p class="card-text">我超棒</p>
+                        </div>
+                      </div>
+                    </div>
+                    <table class="rank">
+                      <tr>
+                        <th>排名</th>
+                        <th>名稱</th>
+                        <th>花費時間</th>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>
+                          <div class="player">
+                            <img src="images/player2.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言2"/>
+                            <span>Name2</span>
+                          </div>  
+                        </td>
+                        <td>11:00</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>
+                          <div class="player">
+                            <img src="images/player2.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言3"/>
+                            <span>Name3</span>
+                          </div>  
+                        </td>
+                        <td>15:00</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>
+                          <div class="player">
+                            <img src="images/player3.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言4"/>
+                            <span>Name4</span>
+                          </div>  
+                        </td>
+                        <td>30:00</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>
+                          <div class="player">
+                            <img src="images/player4.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言5"/>
+                            <span>Name5</span>
+                          </div>  
+                        </td>
+                        <td>60:00</td>
+                      </tr>
+                    </table>`
+      Swal.fire({
+        html: html,
+        allowOutsideClick: false,
+        showCloseButton: true,
+        confirmButtonText: "更多",
+        didOpen: () => {
+          var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+          popoverTriggerList.forEach(function (popoverTriggerEl) {
+            new bootstrap.Popover(popoverTriggerEl)
+          })
+        }
+      }).then((result) => {
+        if (result.value) {
+          window.open("html/rank.html", "_blank")
+        }
+      })
+  }
+</script>
+</html>

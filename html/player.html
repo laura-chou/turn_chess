@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../images/icon.png"> 
+  <link rel="stylesheet" href="../css/animate.min.css">
+  <link rel="stylesheet" href="../css/common.style.css">
+  <link rel="stylesheet" href="../css/player.style.css">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <title>象棋記憶大賽 V2</title>
+</head>
+<body onselectstart="return false">
+  <css-doodle id="doodle">
+    :doodle{
+      @grid:6 / 100vmax;
+    }
+    @size:@rand(15, 30)px;
+    background:url(../images/@pick(bamboo).png);
+    background-size:cover;
+    background-repeat:no-repeat;
+
+    transform:rotate(@rand(0,360)deg);
+    position:absolute;
+    left: @rand(0, 100%);
+    top: -10%;
+
+    animation:bamboo 30s infinite @rand(0, 50)s;
+    @keyframes bamboo {
+      0% {
+        top:0;
+        left:@rand(-20, 100)%;
+        transform:rotate(@rand(1080,1800)deg);
+      }
+      100% {
+        top:100%;
+        left:@rand(0, 110)%;
+        transform:rotate(@rand(3600,7200)deg);  
+      }
+    }
+  </css-doodle>
+  <section class="d-flex align-items-center justify-content-center">
+    <div class="info d-flex flex-column align-items-center">
+      <input type="text" id="name" placeholder="請輸入姓名" maxlength="10">
+      <ul class="nav nav-tabs">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#player1" type="button" aria-selected="true" data-value="1">
+            <img src="../images/player1.png">
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#player2" type="button" aria-selected="false" data-value="2">
+            <img src="../images/player2.png">
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#player3" type="button" aria-selected="false" data-value="3">
+            <img src="../images/player3.png">
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#player4" type="button" aria-selected="false" data-value="4">
+            <img src="../images/player4.png">
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="player1">
+        </div>
+        <div class="tab-pane fade" id="player2">
+        </div>
+        <div class="tab-pane fade" id="player3">
+        </div>
+        <div class="tab-pane fade" id="player4">
+        </div>
+      </div>
+      <h1 id="confirm">確定</h1>
+    </div>
+  </section>
+</body>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script src="../js/sweetalert2@11.js"></script>
+<script src="../js/css-doodle.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="module">
+  import { pathName, getRandEnemy, getSkillInfo } from "../js/common.js"
+  import { setPlayerInfo, setEnemyInfo, setAction, setActivateSkill } from "../js/store.js"
+
+  $(function () {
+    const navItemEle = $(".nav-item").first().find("button");
+    showSkillInfo(navItemEle)
+  })
+
+  $(".nav-item button").click((event) => { 
+    showSkillInfo(event.currentTarget)
+  });
+
+  $("#confirm").click(async () => { 
+    const name = $("#name").val()
+    if (name.trim() != "") {
+      const activeTab = $(".nav-tabs .active");
+      setPlayerInfo(activeTab.data("value"), name)
+      const enemyId = await getRandEnemy();
+      setEnemyInfo(enemyId)
+      setActivateSkill(true)
+      setAction(true)
+      window.location.href = `${pathName}html/start.html`
+    } else {
+      $("#name").addClass("error")
+    }
+  })
+
+  const showSkillInfo = async (ele) => {
+    const data = await getSkillInfo($(ele).data("value"))
+    const skillInfo = `<p>技能:${data.skill}</p><p>${data.desc}</p>`;
+    $(`#player${data.id}`).html(skillInfo)
+  }
+</script>
+</html>

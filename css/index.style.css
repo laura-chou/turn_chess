@@ -1,0 +1,84 @@
+.title {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title img {
+  width: 450px;
+}
+.action {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.action h1 {
+  margin: 0;
+  font-size: 55px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.action h1:hover {
+  transform: scale(1.1)
+}
+
+/* rank */
+.rank {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rank tr th,
+.rank tr td {
+  text-align: center;
+  padding: 2%;
+  vertical-align: middle;
+}
+
+.rank th{
+  background-color: #04AA6D;
+  color: white;
+}
+
+.rank tr {
+  font-weight: 600;
+  color: #3C3C3C;
+  background-color:#F0F0F0;
+  border-bottom: 2px solid #fff;
+}
+
+.winner {
+  align-items: center;
+  padding-top: 10px;
+  margin-top: 30px;
+}
+
+.winner img:nth-child(1) {
+  width: 100px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player img {
+  width: 30px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+/* sweetalert2  */
+.swal2-html-container {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+@media (max-width:576px) {
+  .title img {
+    width: 350px;
+  }
+}
