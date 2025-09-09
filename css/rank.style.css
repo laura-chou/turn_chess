@@ -1,0 +1,78 @@
+html,body {
+  margin: 0;
+  height: 100%;
+}
+
+.logo {
+  text-align: center;
+  margin: 10px 0 0 0;
+}
+
+.logo img {
+  width: 80px;
+}
+
+
+/* ---- pagenation ---- */
+.is-multiline:nth-child(1) {
+  display: none;
+}
+.is-multiline:nth-child(3) {
+  display: flex;
+  justify-content: center;
+}
+.is-multiline:nth-child(3) .is-narrow:nth-child(1) {
+  display: none;
+}
+.is-multiline:nth-child(3) .is-narrow:nth-child(2) {
+  margin-left: inherit !important;
+}
+.pagination-link {
+  font-weight: bold;
+  border-color: gray;
+}
+
+/* ---- search ---- */
+.search {
+  display: flex;
+  justify-content: center;
+}
+
+input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-image: url('../images/search.png');
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  padding: 10px 20px 10px 40px;
+  transition: width 0.4s ease-in-out;
+  box-shadow: 1px 1px 10px #D0D0D0;
+}
+
+#clear {
+  border: 0;
+  border-radius: .25em;
+  background-color: #ea5455;
+  color: #fff;
+  font-size: 15px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+#clear:hover{
+  filter: grayscale(10%);
+}
+
+/* ---- ranking ---- */
+#rank {
+  text-align: center;
+}
+
+.load {
+  margin-top: 10%;
+}

@@ -1,0 +1,79 @@
+:root {
+  --white: #fff;
+  --light-green: #00A600;
+  --yellow: #E1E100;
+  --table-tr-bg: #F0F0F0;
+  --table-tr-color: #3C3C3C;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.table thead th {
+  font-size: 24px;
+  font-weight: 600;
+  background-color: var(--light-green);
+  color: var(--white);
+}
+
+.table thead th:nth-child(1) {
+  width: 20%;
+}
+.table thead th:nth-child(2) {
+  width: 40%;
+}
+.table thead th:nth-child(3) {
+  width: 45%;
+}
+
+.table tbody tr {
+  color: var(--table-tr-color);
+  background-color: var(--table-tr-bg);
+  border-bottom: 2px solid var(--white);
+  font-size: 20px;
+}
+
+.table tbody td {
+  word-break: break-all;
+  vertical-align: middle;
+}
+
+.top1 {
+  color: var(--white) !important;
+  background: linear-gradient(170deg, #FF4500, #FFd700);
+  font-size: 24px !important;
+  font-weight: bold;
+}
+
+.accordion {
+  background-color: transparent;
+  color: var(--white);
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: -5%;
+  transform: translate(-5%, -50%);
+}
+
+.more {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.trophy {
+  animation: platinumGlow 2s infinite;
+}
+
+@keyframes platinumGlow {
+  0%   { text-shadow: 0 0 5px #E5E4E2; }
+  50%  { text-shadow: 0 0 20px #F8F8FF; }
+  100% { text-shadow: 0 0 5px #E5E4E2; }
+}

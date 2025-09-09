@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="./images/icon.png">
-  <link rel="stylesheet" href="./css/bootstrap.min.css"> 
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/fontawesome.min.css">
+  <link rel="stylesheet" href="./css/solid.min.css">
   <link rel="stylesheet" href="./css/animate.min.css">
+  <link rel="stylesheet" href="./css/dataTable.style.css">
   <link rel="stylesheet" href="./css/common.style.css">
   <link rel="stylesheet" href="./css/index.style.css">
   <title>象棋記憶大賽 V2</title>
@@ -44,97 +47,75 @@
       <img class="animate__animated animate__backInDown" src="./images/title.png">
     </div>
     <div class="action">
-      <h1 onclick="Start()">參加</h1>
-      <h1 onclick="Rank()">排行</h1>
+      <h1 id="start">參加</h1>
+      <h1 id="ranking">排行</h1>
       <!-- <div>
         <img src="./images/action2.PNG" onclick="Continue()">
       </div> -->
     </div>
   </section>
 </body>
+<script src="./js/jquery-3.7.1.min.js"></script>
 <script src="./js/sweetalert2@11.js"></script>
 <script src="./js/css-doodle.min.js"></script>
-<script src="./js/popper.min.js"></script>
-<script src="./js/bootstrap.min.js"></script>
-<script>
-  function Start() {
-    location.href = "html/player.html"
-  }
-  
-  function Rank() {
-      const html = `<div class="winner card">
-                      <img src="./images/player1.png" class="card-img-top">
-                      <div class="card-body">
-                        <h4 class="card-title">Name1</h4>
-                        <div class="card-text">
-                        <h3 class="card-text">10:00</h3>
-                          <p class="card-text">我超棒</p>
-                        </div>
-                      </div>
-                    </div>
-                    <table class="rank">
-                      <tr>
-                        <th>排名</th>
-                        <th>名稱</th>
-                        <th>花費時間</th>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>
-                          <div class="player">
-                            <img src="images/player2.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言2"/>
-                            <span>Name2</span>
-                          </div>  
-                        </td>
-                        <td>11:00</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>
-                          <div class="player">
-                            <img src="images/player2.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言3"/>
-                            <span>Name3</span>
-                          </div>  
-                        </td>
-                        <td>15:00</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>
-                          <div class="player">
-                            <img src="images/player3.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言4"/>
-                            <span>Name4</span>
-                          </div>  
-                        </td>
-                        <td>30:00</td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>
-                          <div class="player">
-                            <img src="images/player4.png" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="玩家留言5"/>
-                            <span>Name5</span>
-                          </div>  
-                        </td>
-                        <td>60:00</td>
-                      </tr>
-                    </table>`
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="./js/fontawesome.min.js"></script>
+<script type="module">
+  import { connectServer, getStoreItem, getTopFivePlayers } from "./js/store.js"
+  import { getRankHtml } from "./js/rank.js"
+  import { convertToBool, accordionEffect } from "./js/common.js"
+
+  $(async () => {
+    if (convertToBool(getStoreItem("connect"))) {
       Swal.fire({
-        html: html,
+        html: `<div><img src="./images/loading.svg"><h2>請稍後</h2></div>`,
         allowOutsideClick: false,
-        showCloseButton: true,
-        confirmButtonText: "更多",
-        didOpen: () => {
-          var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-          popoverTriggerList.forEach(function (popoverTriggerEl) {
-            new bootstrap.Popover(popoverTriggerEl)
-          })
-        }
-      }).then((result) => {
-        if (result.value) {
-          window.open("html/rank.html", "_blank")
-        }
+        showConfirmButton:false
       })
-  }
+      const isConnect = await connectServer()
+      if (isConnect) {
+        Swal.close()
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "伺服器維護中",
+          html: "<h4>請稍後再試</h4>",
+          allowOutsideClick: false,
+          showConfirmButton:false
+        })
+      }
+    }
+  })
+
+  $("#start").click(() => {
+    location.href = "html/player.html"
+  })
+
+  $("#ranking").click(async () => {
+    Swal.fire({
+      imageUrl: "./images/rank.png",
+      imageWidth: 80,
+      imageHeight: 80,
+      allowOutsideClick: false,
+      showCloseButton: true,
+      html: `<div id="data"><img src="./images/loading.svg"></div>`,
+      confirmButtonText: "更多",
+    }).then((result) => {
+      if (result.value) {
+        window.open("html/rank.html", "_blank")
+      }
+    })
+    const response = await getTopFivePlayers()
+    $("#data").html(getRankHtml(response))
+    
+    $("#data").on("click", ".accordion", event => {
+      accordionEffect(event.currentTarget)
+    })
+
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    popoverTriggerList.forEach(function (popoverTriggerEl) {
+      new bootstrap.Popover(popoverTriggerEl)
+    })
+  })
 </script>
 </html>

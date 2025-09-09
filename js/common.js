@@ -46,3 +46,24 @@ export const getSkillInfo = async (id) => {
   const data = await readJsonFile(`${getPathName()}json/skillInfo.json`);
   return data.find(info => info.id === id)
 }
+
+export const accordionEffect = (element) => {
+  element.classList.toggle("active");
+  let state = "up"
+  const angleElement = element.querySelector("i.fa-solid");
+  const panel = element.nextElementSibling;
+  if (panel.style.maxHeight) {
+    panel.style.maxHeight = null;
+  } else {
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    state = "down"
+  } 
+  $(angleElement).attr("class", `fa-solid fa-angle-${state}`)
+}
+
+export const convertToBool = (value) => {
+  if (!value) {
+    return false
+  }
+  return value.toLowerCase() === "true" || value === "1"
+}

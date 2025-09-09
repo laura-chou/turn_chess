@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排行榜</title>
+  <link rel="icon" type="image/png" href="../images/rank.png"> 
+  <link rel="stylesheet" href="../css/fontawesome.min.css">
+  <link rel="stylesheet" href="../css/solid.min.css">
+  <link rel="stylesheet" href="../css/dataTables.bulma.css">
+  <link rel="stylesheet" href="../css/bulma.min.css">
+  <link rel="stylesheet" href="../css/dataTable.style.css">
+  <link rel="stylesheet" href="../css/common.style.css">
+  <link rel="stylesheet" href="../css/rank.style.css">
+</head>
+<body>
+  <css-doodle id="doodle">
+    :doodle{
+      @grid:6 / 100vmax;
+    }
+    @size:@rand(15, 30)px;
+    background:url(../images/@pick(bamboo).png);
+    background-size:cover;
+    background-repeat:no-repeat;
+
+    transform:rotate(@rand(0,360)deg);
+    position:absolute;
+    left: @rand(0, 100%);
+    top: -10%;
+
+    animation:bamboo 30s infinite @rand(0, 50)s;
+    @keyframes bamboo {
+      0% {
+        top:0;
+        left:@rand(-20, 100)%;
+        transform:rotate(@rand(1080,1800)deg);
+      }
+      100% {
+        top:100%;
+        left:@rand(0, 110)%;
+        transform:rotate(@rand(3600,7200)deg);  
+      }
+    }
+  </css-doodle>
+  <section>
+    <div class="logo">
+      <img src="../images/rank.png">
+    </div>
+    <div class="search">
+      <input id="search" type="text" autocomplete="off" placeholder="請輸入姓名">
+      <button id="clear">
+        <i class="fa-solid fa-x"></i>
+      </button>
+    </div>
+    <div id="rank">
+      <img class="load" src="../images/loading.svg">
+    </div>
+  </section>
+</body>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script src="../js/fontawesome.min.js"></script>
+<script src="../js/css-doodle.min.js"></script>
+<script src="../js/dataTables.js"></script>
+<script src="../js/dataTables.bulma.js"></script>
+<script type="module">
+  import { accordionEffect } from "../js/common.js"
+  import { getRankHtml } from "../js/rank.js"
+  import { getAllPlayers } from "../js/store.js"
+
+  const initialDataTable = (emptyMsg = "暫無玩家") => {
+    $(".table").DataTable({
+      searching: false,
+      autoWidth: false,
+      ordering: false,
+      bLengthChange: false,
+      bInfo: false,
+      pageLength: 10,
+      columnDefs: [
+        {
+          targets: ["_all"],
+          className: "mdc-data-table__cell"
+        }
+      ],
+      language: {
+        paginate: {
+          first: "&#171;",
+          previous: "&#8249;",
+          next: "&#8250;",
+          last: "&#187;"
+        },
+        emptyTable: emptyMsg
+      }
+    })
+  }
+
+  const players = await getAllPlayers()
+  console.log(players)
+  $("#rank").html(getRankHtml(players))
+  initialDataTable()
+
+  $("#search").on("change", () => {
+    const searchValue = $("#search").val()
+    const searchData = players.filter(item =>
+      item.players.some(p => p.player.includes(searchValue))
+    );
+    $("#rank").html(getRankHtml(searchData))
+    initialDataTable()
+  })
+
+  $("#clear").click(() => {
+    if ($("#search").val() !== "") {
+      $("#search").val("")
+      $("#rank").html(getRankHtml(players))
+      initialDataTable()
+    }
+  })
+  
+  $("#rank").on("click", ".accordion", event => {
+    accordionEffect(event.currentTarget)
+  })
+</script>
+</html>

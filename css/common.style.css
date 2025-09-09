@@ -13,8 +13,8 @@
 
 @font-face {
   font-family: masafont-Regular;
-  src: url('../webfont/MasaFont-Regular.woff2')
-  , url('../webfont/MasaFont-Regular.woff');
+  src: url('../webfonts/MasaFont-Regular.woff2')
+  , url('../webfonts/MasaFont-Regular.woff');
 }
 
 html,body {
@@ -36,4 +36,18 @@ section {
   height: 100%;
   position: absolute;
   top: 0;
+  padding: 0 15px;
+}
+
+/* rank player */
+.player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player img {
+  width: 30px;
+  margin-right: 5px;
+  cursor: pointer;
 }

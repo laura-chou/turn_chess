@@ -1,5 +1,15 @@
 import { getEnemyData } from "../js/common.js"
+
 const domain = "http://localhost:3000"
+const turnChessUrl = `${domain}/turn-chess`
+
+export const setStoreItem = (key, value) => {
+  sessionStorage.setItem(key, value)
+}
+
+export const getStoreItem = (key) => {
+  return sessionStorage.getItem(key)
+}
 
 export const getChessBoardStore = () => {
   const data = getStoreItem("chess-board")
@@ -111,10 +121,51 @@ export const setOpenChess = (openChess = []) => {
   setStoreItem("open-chess", openChess.toString())
 }
 
-export const setStoreItem = (key, value) => {
-  sessionStorage.setItem(key, value)
+export const getTopFivePlayers = () => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `${turnChessUrl}/top5`,
+      method: "GET",
+      dataType: "json",
+      success: function (response) {
+        resolve(response.data)
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        resolve([])
+      }
+    })
+  })
 }
 
-export const getStoreItem = (key) => {
-  return sessionStorage.getItem(key)
+export const getAllPlayers = () => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: turnChessUrl,
+      method: "GET",
+      dataType: "json",
+      success: function (response) {
+        resolve(response.data)
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        resolve([])
+      }
+    })
+  })
+}
+
+export const connectServer = () => {
+  setStoreItem("connect", false)
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `${domain}`,
+      method: "GET",
+      success: function () {
+        setStoreItem("connect", true)
+        resolve(true)
+      },
+      error: function () {
+        resolve(false)
+      }
+    })
+  })
 }
