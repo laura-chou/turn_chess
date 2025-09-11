@@ -211,6 +211,5 @@ export const showSkillEffect = async (id, isPlayer = true) => {
       }
     }
   }
-
   $('.skill-name').eq(index).textillate(data)
 }

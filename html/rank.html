@@ -94,10 +94,13 @@
     })
   }
 
-  const players = await getAllPlayers()
-  console.log(players)
-  $("#rank").html(getRankHtml(players))
-  initialDataTable()
+  $(async() => {
+    const players = await getAllPlayers()
+    $("#rank").html(getRankHtml(players))
+    if (players.length !== 0) {
+      initialDataTable()
+    }
+  })
 
   $("#search").on("change", () => {
     const searchValue = $("#search").val()

@@ -49,12 +49,12 @@ const getInfoHtml = (datas) => {
 
 export const getRankHtml = (data) => {
   const html = (data.length === 0) ? `<tr><td colspan="3">暫無玩家</td></tr>` : getInfoHtml(data)
-  return `<table class="table">
+  return `<table class="table" style="margin-top: 6px">
             <thead>
               <tr>
                 <th>排名</th>
                 <th>姓名</th>
-                <th>身價</th>
+                <th>花費時間</th>
               </tr>
             </thead>
             <tbody>${html}</tbody>

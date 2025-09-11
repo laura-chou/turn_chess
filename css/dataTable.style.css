@@ -23,10 +23,10 @@
   width: 20%;
 }
 .table thead th:nth-child(2) {
-  width: 40%;
+  width: 50%;
 }
 .table thead th:nth-child(3) {
-  width: 45%;
+  width: 30%;
 }
 
 .table tbody tr {

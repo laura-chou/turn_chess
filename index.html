@@ -49,9 +49,6 @@
     <div class="action">
       <h1 id="start">參加</h1>
       <h1 id="ranking">排行</h1>
-      <!-- <div>
-        <img src="./images/action2.PNG" onclick="Continue()">
-      </div> -->
     </div>
   </section>
 </body>
@@ -61,11 +58,18 @@
 <script src="./js/bootstrap.bundle.min.js"></script>
 <script src="./js/fontawesome.min.js"></script>
 <script type="module">
-  import { connectServer, getStoreItem, getTopFivePlayers } from "./js/store.js"
+  import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo } from "./js/store.js"
   import { getRankHtml } from "./js/rank.js"
   import { convertToBool, accordionEffect } from "./js/common.js"
 
+  const isPlayerExist = () => {
+    return getPlayerInfo() != undefined
+  }
+
   $(async () => {
+    if (isPlayerExist()) {
+      $("#start").text("繼續")
+    }
     if (convertToBool(getStoreItem("connect"))) {
       Swal.fire({
         html: `<div><img src="./images/loading.svg"><h2>請稍後</h2></div>`,
@@ -88,7 +92,11 @@
   })
 
   $("#start").click(() => {
-    location.href = "html/player.html"
+    let html = "player.html";
+    if (isPlayerExist()) {
+      html = "start.html";
+    }
+    location.href = `html/${html}`
   })
 
   $("#ranking").click(async () => {
@@ -107,7 +115,7 @@
     })
     const response = await getTopFivePlayers()
     $("#data").html(getRankHtml(response))
-    
+
     $("#data").on("click", ".accordion", event => {
       accordionEffect(event.currentTarget)
     })

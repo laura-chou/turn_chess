@@ -4,9 +4,11 @@
   align-items: center;
   justify-content: center;
 }
+
 .title img {
   width: 450px;
 }
+
 .action {
   height: 50%;
   display: flex;
@@ -14,12 +16,20 @@
   justify-content: space-evenly;
   flex-direction: column;
 }
+
 .action h1 {
   margin: 0;
   font-size: 55px;
   font-weight: bold;
   cursor: pointer;
 }
+
 .action h1:hover {
   transform: scale(1.1)
+}
+
+@media (max-width: 500px) {
+  .title img {
+    width: 95%;
+  }
 }
