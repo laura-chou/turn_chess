@@ -67,3 +67,31 @@ export const convertToBool = (value) => {
   }
   return value.toLowerCase() === "true" || value === "1"
 }
+
+export const redirectToHome  = () => {
+  removeStorage();
+  window.location.href = pathName;
+};
+
+export const serverError = async () => {
+  await Swal.fire({
+    icon: "error",
+    title: "伺服器錯誤",
+    html: `<h3 style="margin:0;">請稍後再試</h3>`,
+    timer: 3000,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    willClose: () => {
+      removeStorage();
+      window.location.href = pathName;
+    }
+  });
+};
+
+export const removeStorage = () => {
+  // sessionStorage.removeItem("process");
+  // sessionStorage.removeItem("time");
+  // sessionStorage.removeItem("lotto");
+  // sessionStorage.removeItem("clock");
+  // sessionStorage.removeItem("wallet");
+}

@@ -153,6 +153,32 @@ export const getAllPlayers = () => {
   })
 }
 
+export const insertPlayer = (message) => {
+  return new Promise((resolve, reject) => {
+    const player = getPlayerInfo();
+    const data = {
+      character: player.id,
+      player: player.name,
+      score: player.score,
+      spentTime: getTime(),
+      message: message
+    }
+    $.ajax({
+      url: `${turnChessUrl}/create`,
+      method: "POST",
+      dataType: "json",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function (response) {
+        resolve(response)
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        resolve(null)
+      }
+    })
+  })
+}
+
 export const connectServer = () => {
   setStoreItem("connect", false)
   return new Promise((resolve, reject) => {

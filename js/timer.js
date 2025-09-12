@@ -20,7 +20,7 @@ const updateTimer = () => {
 }
 
 export const timeTo = (action = 'start') => {
-  switch (action){
+  switch (action) {
     case "start":
       timerInterval = setInterval(updateTimer, 1000);
       break
@@ -32,6 +32,9 @@ export const timeTo = (action = 'start') => {
       timerInterval = null;
       seconds = 0;
       document.getElementById('timer').textContent = '00:00';
+      break
+    case 'gameOver':
+      document.getElementById('timer').textContent = getTime();
       break
   }
 }

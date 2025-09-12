@@ -49,15 +49,13 @@
 <script src="../js/jquery.textillate.js"></script>
 <script src="../js/sweetalert2@11.js"></script>
 <script type="module">
-  import { pathName, randNumberWithMin, getSkillInfo } from "../js/common.js"
+  import { pathName, randNumberWithMin, getSkillInfo, redirectToHome, serverError } from "../js/common.js"
   import { timeTo } from "../js/timer.js"
   import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain } from "../js/start.js"
-  import { setChessBoardStore, getChessBoardStore,
-          getPlayerInfo, getEnemyInfo,
-          setPlayerScore, setEnemyScore,
-          getActivateSkill, setActivateSkill,
-          getAction, setAction,
-          getOpenChess, setOpenChess } from "../js/store.js"
+  import { setChessBoardStore, getChessBoardStore, getPlayerInfo, getEnemyInfo,
+          setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill,
+          getAction, setAction, getOpenChess, setOpenChess,
+          insertPlayer } from "../js/store.js"
 
   let flipNumbers = []
 
@@ -66,7 +64,13 @@
     
     initChessBoard()
     initRoleInfo()
-    timeTo()
+
+    if ($(".chess").length == 0) {
+      timeTo("gameOver")
+      gameOver()
+    } else {
+      timeTo()
+    }
 
     $(".chess").on("click", clickChess)
 
@@ -291,16 +295,33 @@
                   </div>
                 <div class="win-message">
                   <div>
-                    <input id="swal2-input" class="swal2-input" placeholder="你的勝利留言 (可略過)" type="text" maxlength="30">
+                    <input id="message-input" class="swal2-input" placeholder="你的勝利留言 (可略過)" type="text" maxlength="30">
                   </div>
                   <img src="${pathName}images/player${playerInfo.id}.png"/>
                 </div>`,
           confirmButtonText: "確定"
-        }).then(() => {
-          console.log($("#swal2-input").text())
+        }).then(async () => {
+          const message = $("#message-input").val().trim()
+          const result = await insertPlayer(message)
+          if (result) {
+            if (result?.data?.topFive) {
+              audioEffect("rich")
+              Swal.fire({
+                html: `<img style="width:90px" src="${pathName}images/value.png"/>
+                        <h2 style="margin-bottom:0">前五名達成！你的記憶力已經無人能忽視！</h2>`,
+                allowOutsideClick: false,
+                confirmButtonText: "確定"
+              }).then(result => {
+                redirectToHome()
+              })
+            } else {
+              redirectToHome()
+            }
+          } else {
+            serverError()
+          }
         })
       }
-      window.location.href = pathName
     }
   })
 
