@@ -131,7 +131,7 @@ export const getTopFivePlayers = () => {
         resolve(response.data)
       },
       error: function (xhr, ajaxOptions, thrownError) {
-        resolve([])
+        resolve(null)
       }
     })
   })
@@ -147,7 +147,7 @@ export const getAllPlayers = () => {
         resolve(response.data)
       },
       error: function (xhr, ajaxOptions, thrownError) {
-        resolve([])
+        resolve(null)
       }
     })
   })
@@ -194,4 +194,14 @@ export const connectServer = () => {
       }
     })
   })
+}
+
+export const removeStorage = () => {
+  sessionStorage.removeItem("action");
+  sessionStorage.removeItem("activate-skill");
+  sessionStorage.removeItem("chess-board");
+  sessionStorage.removeItem("chess-enemy");
+  sessionStorage.removeItem("chess-player");
+  sessionStorage.removeItem("open-chess");
+  sessionStorage.removeItem("time");
 }

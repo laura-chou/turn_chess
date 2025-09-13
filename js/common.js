@@ -1,3 +1,5 @@
+import { removeStorage } from "./store.js"
+
 const getPathName = () => {
   let path = '/'
   if (window.location.pathname.includes('turn_chess')) {
@@ -68,9 +70,11 @@ export const convertToBool = (value) => {
   return value.toLowerCase() === "true" || value === "1"
 }
 
-export const redirectToHome  = () => {
+export const redirectToHome  = (isRedirect = true) => {
   removeStorage();
-  window.location.href = pathName;
+  if (isRedirect) {
+    window.location.href = pathName;
+  }
 };
 
 export const serverError = async () => {
@@ -87,11 +91,3 @@ export const serverError = async () => {
     }
   });
 };
-
-export const removeStorage = () => {
-  // sessionStorage.removeItem("process");
-  // sessionStorage.removeItem("time");
-  // sessionStorage.removeItem("lotto");
-  // sessionStorage.removeItem("clock");
-  // sessionStorage.removeItem("wallet");
-}

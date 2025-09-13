@@ -31,7 +31,7 @@
 
 .table tbody tr {
   color: var(--table-tr-color);
-  background-color: var(--table-tr-bg);
+  background-color: var(--table-tr-bg) !important;
   border-bottom: 2px solid var(--white);
   font-size: 20px;
 }
@@ -50,7 +50,6 @@
 
 .accordion {
   background-color: transparent;
-  color: var(--white);
   border: none;
   padding: 5px 10px;
   font-size: 14px;

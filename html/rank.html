@@ -60,11 +60,12 @@
 </body>
 <script src="../js/jquery-3.7.1.min.js"></script>
 <script src="../js/fontawesome.min.js"></script>
+<script src="../js/sweetalert2@11.js"></script>
 <script src="../js/css-doodle.min.js"></script>
 <script src="../js/dataTables.js"></script>
 <script src="../js/dataTables.bulma.js"></script>
 <script type="module">
-  import { accordionEffect } from "../js/common.js"
+  import { accordionEffect, serverError } from "../js/common.js"
   import { getRankHtml } from "../js/rank.js"
   import { getAllPlayers } from "../js/store.js"
 
@@ -96,9 +97,13 @@
 
   $(async() => {
     const players = await getAllPlayers()
-    $("#rank").html(getRankHtml(players))
-    if (players.length !== 0) {
-      initialDataTable()
+    if (players) { 
+      $("#rank").html(getRankHtml(players))
+      if (players.length !== 0) {
+        initialDataTable()
+      }
+    } else {
+      serverError(false)
     }
   })
 
@@ -118,7 +123,7 @@
       initialDataTable()
     }
   })
-  
+
   $("#rank").on("click", ".accordion", event => {
     accordionEffect(event.currentTarget)
   })

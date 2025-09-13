@@ -235,4 +235,27 @@ table td {
   .skill-open {
     transform: rotateX(0deg);
   }
+
+  .top {
+    height: 7%;
+    font-size: 40px;
+  }
+
+  .picture img {
+    width: 70px;
+  }
+
+  .info {
+    height: 10%;
+  }
+
+  table td {
+    width: var(--mobile-board-width);
+    height: var(--mobile-board-height);
+  }
+
+  .chess {
+    width: var(--mobile-board-width);
+    height: var(--mobile-board-height);
+  }
 }
