@@ -89,32 +89,32 @@
 
   $(function () {
     const navItemEle = $(".nav-item").first().find("button");
-    showSkillInfo(navItemEle)
-  })
+    showSkillInfo(navItemEle);
+  });
 
   $(".nav-item button").click((event) => { 
-    showSkillInfo(event.currentTarget)
+    showSkillInfo(event.currentTarget);
   });
 
   $("#confirm").click(async () => { 
-    const name = $("#name").val()
+    const name = $("#name").val();
     if (name.trim() != "") {
       const activeTab = $(".nav-tabs .active");
-      setPlayerInfo(activeTab.data("value"), name)
+      setPlayerInfo(activeTab.data("value"), name);
       const enemyId = await getRandEnemy();
-      setEnemyInfo(enemyId)
-      setActivateSkill(true)
-      setAction(true)
-      window.location.href = `${pathName}html/start.html`
+      setEnemyInfo(enemyId);
+      setActivateSkill(true);
+      setAction(true);
+      window.location.href = `${pathName}html/start.html`;
     } else {
-      $("#name").addClass("error")
+      $("#name").addClass("error");
     }
-  })
+  });
 
   const showSkillInfo = async (ele) => {
-    const data = await getSkillInfo($(ele).data("value"))
+    const data = await getSkillInfo($(ele).data("value"));
     const skillInfo = `<p>技能:${data.skill}</p><p>${data.desc}</p>`;
-    $(`#player${data.id}`).html(skillInfo)
-  }
+    $(`#player${data.id}`).html(skillInfo);
+  };
 </script>
 </html>

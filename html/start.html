@@ -49,35 +49,35 @@
 <script src="../js/jquery.textillate.js"></script>
 <script src="../js/sweetalert2@11.js"></script>
 <script type="module">
-  import { pathName, randNumberWithMin, getSkillInfo, redirectToHome, serverError } from "../js/common.js"
-  import { timeTo } from "../js/timer.js"
-  import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain } from "../js/start.js"
+  import { pathName, randNumberWithMin, getSkillInfo, redirectToHome, serverError } from "../js/common.js";
+  import { timeTo } from "../js/timer.js";
+  import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain } from "../js/start.js";
   import { setChessBoardStore, getChessBoardStore, getPlayerInfo, getEnemyInfo,
           setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill,
           getAction, setAction, getOpenChess, setOpenChess,
-          insertPlayer } from "../js/store.js"
+          insertPlayer } from "../js/store.js";
 
-  let flipNumbers = []
+  let flipNumbers = [];
 
   $(function () {
-    history.replaceState(null, "", pathName)
+    history.replaceState(null, "", pathName);
     
-    initChessBoard()
-    initRoleInfo()
+    initChessBoard();
+    initRoleInfo();
 
     if ($(".chess").length == 0) {
-      timeTo("gameOver")
-      gameOver()
+      timeTo("gameOver");
+      gameOver();
     } else {
-      timeTo()
+      timeTo();
     }
 
-    $(".chess").on("click", clickChess)
+    $(".chess").on("click", clickChess);
 
     $("#skill").on("click", async () => {
-      timeTo("stop")
-      const playerInfo = getPlayerInfo()
-      const skillInfo = await getSkillInfo(playerInfo.id)
+      timeTo("stop");
+      const playerInfo = getPlayerInfo();
+      const skillInfo = await getSkillInfo(playerInfo.id);
       Swal.fire({
         title: "確定要發動技能嗎?",
         html: `<div class="skill-info">
@@ -92,16 +92,16 @@
         cancelButtonText: "取消"
       }).then( async (result) => {
         if (result.value) { 
-          $("#skill").addClass("activated")
-          showSkillEffect(playerInfo.id)
-          setActivateSkill(true)
+          $("#skill").addClass("activated");
+          showSkillEffect(playerInfo.id);
+          setActivateSkill(true);
         }
-        timeTo()
-      })
-    })
+        timeTo();
+      });
+    });
 
     $("#rule").on("click", function () {
-      timeTo("stop")
+      timeTo("stop");
       Swal.fire({
         allowOutsideClick: false,
         html: `<h1>遊戲規則</h1>
@@ -113,147 +113,147 @@
               </div>`,
         confirmButtonText: "確定"
       }).then(() => {
-        timeTo()
-      })
-    })
+        timeTo();
+      });
+    });
   })
 
   const initRoleInfo = () => {
-    const playerInfo = getPlayerInfo()
-    const enemyInfo = getEnemyInfo()
+    const playerInfo = getPlayerInfo();
+    const enemyInfo = getEnemyInfo();
 
-    $(".picture img").eq(0).attr("src", `${pathName}images/player${playerInfo.id}.png`)
-    $(".picture img").eq(1).attr("src", `${pathName}images/robot${enemyInfo.id}.png`)
+    $(".picture img").eq(0).attr("src", `${pathName}images/player${playerInfo.id}.png`);
+    $(".picture img").eq(1).attr("src", `${pathName}images/robot${enemyInfo.id}.png`);
 
-    $(".name span").eq(0).text(playerInfo.name)
-    $(".name span").eq(1).text(enemyInfo.name)
+    $(".name span").eq(0).text(playerInfo.name);
+    $(".name span").eq(1).text(enemyInfo.name);
 
-    $(".score span").eq(0).text(playerInfo.score)
-    $(".score span").eq(1).text(enemyInfo.score)
+    $(".score span").eq(0).text(playerInfo.score);
+    $(".score span").eq(1).text(enemyInfo.score);
     
-    const index = getAction() ? 0 : 1
-    $(".picture").eq(index).addClass("action")
+    const index = getAction() ? 0 : 1;
+    $(".picture").eq(index).addClass("action");
     if (!getAction()) {
-      autoFlip()
+      autoFlip();
     }
 
     if (getActivateSkill().player) {
-      $("#skill").addClass("activated")
+      $("#skill").addClass("activated");
     }
-  }
+  };
   
   const initChessBoard = () => {
     var pageWidth = document.documentElement.clientWidth;
-    let grids = [4, 8]
+    let grids = [4, 8];
     if (pageWidth < 791) {
-      grids = [8, 4]
+      grids = [8, 4];
     }
-    const chessBoard = getChessBoardStore()
-    let chessBoardIndex = 0
-    let html = ""
+    const chessBoard = getChessBoardStore();
+    let chessBoardIndex = 0;
+    let html = "";
     for (let i = 0; i < grids[0]; i++) {
-      html += "<tr>"
+      html += "<tr>";
       for (let j = 0; j < grids[1]; j++) {
-        html += "<td>"
+        html += "<td>";
         if (chessBoard.length == 0 || chessBoard[chessBoardIndex] > 0) {
           html += `<div class="chess">
                     <div class="front"></div>
                     <div class="back"></div>
-                  </div>`
+                  </div>`;
         }
-        html += "</td>"
-        chessBoardIndex++
+        html += "</td>";
+        chessBoardIndex++;
       }
-      html += "</tr>"
+      html += "</tr>";
     }
-    $("#board").append(html)
+    $("#board").append(html);
 
     if (chessBoard.length > 0) {
       for (let i = 0; i < chessBoard.length; i++) {
-        let num = chessBoard[i]
+        let num = chessBoard[i];
         if (num != 0) {
-          $("td").eq(i).find(".front").css("background-image", `url(../images/chess${num}.png)`)
-          $("td").eq(i).find(".chess").attr("data-image", num)
-          if (num == 2) num = 1
-          if (num == 13 || num == 14) num = 2
-          $("td").eq(i).find(".chess").attr("data-chess", num)
+          $("td").eq(i).find(".front").css("background-image", `url(../images/chess${num}.png)`);
+          $("td").eq(i).find(".chess").attr("data-image", num);
+          if (num == 2) num = 1;
+          if (num == 13 || num == 14) num = 2;
+          $("td").eq(i).find(".chess").attr("data-chess", num);
         }
-      }
+      };
 
       getOpenChess().forEach(index => {
-        clickChess({currentTarget: $(".chess").eq(index)})
-      })
+        clickChess({currentTarget: $(".chess").eq(index)});
+      });
     } else {
-      let chessNumber = [1, 2]
-      const totalChess = $(".chess").length
+      let chessNumber = [1, 2];
+      const totalChess = $(".chess").length;
       
       for (let i = 3; i <= 12; i++) {
-        chessNumber.push(i, i)
+        chessNumber.push(i, i);
       }
 
       for (let i = 0; i < 5; i++) {
-        chessNumber.push(13, 14)
+        chessNumber.push(13, 14);
       }
 
       // Fisher–Yates shuffle
       for (let i = totalChess - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [chessNumber[i], chessNumber[j]] = [chessNumber[j], chessNumber[i]]
+        [chessNumber[i], chessNumber[j]] = [chessNumber[j], chessNumber[i]];
       }
 
       for (let i = 0; i < totalChess; i++) {
-        let num = chessNumber[i]
-        $(".chess").eq(i).find(".front").css("background-image", `url(../images/chess${num}.png)`)
-        $(".chess").eq(i).attr("data-image", num)
-        if (num == 2) num = 1
-        if (num == 13 || num == 14) num = 2
-        $(".chess").eq(i).attr("data-chess", num)
+        let num = chessNumber[i];
+        $(".chess").eq(i).find(".front").css("background-image", `url(../images/chess${num}.png)`);
+        $(".chess").eq(i).attr("data-image", num);
+        if (num == 2) num = 1;
+        if (num == 13 || num == 14) num = 2;
+        $(".chess").eq(i).attr("data-chess", num);
       }
     }
-    setChessBoardStore()
+    setChessBoardStore();
   }
 
   const getOpenChessIndex = () => {
     return $(".chess").map((index) => {
       if ($(".chess").eq(index).hasClass("open")) {
-        return index
+        return index;
       }
-    }).get()
-  }
+    }).get();
+  };
 
   const clickChess = (event) => {
-    const ele = event.currentTarget
+    const ele = event.currentTarget;
     if (flipNumbers.length < 2 && !$(ele).hasClass("open")) {
-      flipNumbers.push($(ele).data("chess"))
-      $(ele).addClass("open")
+      flipNumbers.push($(ele).data("chess"));
+      $(ele).addClass("open");
       if (getAction()) {
-        setOpenChess(getOpenChessIndex())
+        setOpenChess(getOpenChessIndex());
         if (flipNumbers.length == 2) {
-          const isEqual = flipNumbers.every(num => num === flipNumbers[0])
+          const isEqual = flipNumbers.every(num => num === flipNumbers[0]);
           if (isEqual) {
-            $(".open").fadeTo(1000, 0)
-            setPlayerScore()
+            $(".open").fadeTo(1000, 0);
+            setPlayerScore();
 
             setTimeout(() => {
               $(".open").remove();
-              flipNumbers.length = 0
-              setOpenChess()
-              setChessBoardStore()
+              flipNumbers.length = 0;
+              setOpenChess();
+              setChessBoardStore();
               if ($(".chess").length == 0) {
-                gameOver()
+                gameOver();
               }
-            }, 1000)
+            }, 1000);
           } else {
             setTimeout(() => {
-              $(".open").removeClass("open")
-              flipNumbers.length = 0
-              setOpenChess()
+              $(".open").removeClass("open");
+              flipNumbers.length = 0;
+              setOpenChess();
               if (isPlayerMoveAgain) {
-                setIsMoveAgain(false)
+                setIsMoveAgain(false);
               } else {
-                autoFlip()
+                autoFlip();
               }
-            }, 1000)
+            }, 1000);
           }
         }
       }
@@ -261,10 +261,10 @@
   }
 
   const gameOver = (async () => {
-    timeTo("stop")
-    const chess = $(".chess").length
-    const playerInfo = getPlayerInfo()
-    const enemyInfo = getEnemyInfo()
+    timeTo("stop");
+    const chess = $(".chess").length;
+    const playerInfo = getPlayerInfo();
+    const enemyInfo = getEnemyInfo();
     if (chess == 0) {
       if (playerInfo.score == enemyInfo.score) {
         await Swal.fire({
@@ -274,7 +274,7 @@
                 </div>
                 <div class="draw">平手</div>`,
           confirmButtonText: "確定"
-        })
+        });
       } else if (playerInfo.score < enemyInfo.score) {
         await Swal.fire({
           allowOutsideClick: false,
@@ -286,7 +286,7 @@
                   <img src="${pathName}images/robot${enemyInfo.id}.png"/>
                 </div>`,
           confirmButtonText: "確定"
-        })
+        });
       } else {
         await Swal.fire({
           allowOutsideClick: false,
@@ -301,8 +301,8 @@
                 </div>`,
           confirmButtonText: "確定"
         }).then(async () => {
-          const message = $("#message-input").val().trim()
-          const result = await insertPlayer(message)
+          const message = $("#message-input").val().trim();
+          const result = await insertPlayer(message);
           if (result) {
             if (result?.data?.topFive) {
               Swal.fire({
@@ -311,94 +311,94 @@
                 allowOutsideClick: false,
                 confirmButtonText: "確定"
               }).then(result => {
-                redirectToHome()
-              })
+                redirectToHome();
+              });
             } else {
-              redirectToHome()
+              redirectToHome();
             }
           } else {
-            serverError()
+            serverError();
           }
         })
       }
     }
-  })
+  });
 
   const autoFlip = async () => {
-    $(".picture").eq(0).removeClass("action")
-    $(".picture").eq(1).addClass("action")
-    setAction(false)
-    $("img").addClass("disabled")
-    $(".chess").addClass("disabled")
+    $(".picture").eq(0).removeClass("action");
+    $(".picture").eq(1).addClass("action");
+    setAction(false);
+    $("img").addClass("disabled");
+    $(".chess").addClass("disabled");
 
-    const result = await activateEnemySkill()
+    const result = await activateEnemySkill();
 
     setTimeout(() => {
-      let randNumber = []
+      let randNumber = [];
       while (flipNumbers.length != 2) {
-        const randNum = randNumberWithMin(0, $(".chess").length - 1)
+        const randNum = randNumberWithMin(0, $(".chess").length - 1);
         if (randNumber.includes(randNum)) {
-          continue
+          continue;
         }
 
-        randNumber.push(randNum)
-        const number = $(".chess").eq(randNum).data("chess")
+        randNumber.push(randNum);
+        const number = $(".chess").eq(randNum).data("chess");
         if (!flipNumbers.includes(number)) {
-          flipNumbers.push(number)
+          flipNumbers.push(number);
           setTimeout(() => {
-            $(".chess").eq(randNum).addClass("open")
-            setOpenChess(getOpenChessIndex())
-          }, flipNumbers.length * 500)
+            $(".chess").eq(randNum).addClass("open");
+            setOpenChess(getOpenChessIndex());
+          }, flipNumbers.length * 500);
         }
       }
 
       if(result.reBinding) {
-        $(".chess").on("click", clickChess)
+        $(".chess").on("click", clickChess);
       }
 
       setTimeout(() => {
-        const isEqual = flipNumbers.every(num => num === flipNumbers[0])
+        const isEqual = flipNumbers.every(num => num === flipNumbers[0]);
         if (isEqual) {
-          $(".open").fadeTo(1000, 0)
-          setEnemyScore()
+          $(".open").fadeTo(1000, 0);
+          setEnemyScore();
           
           setTimeout(() => {
             $(".open").remove();
-            flipNumbers.length = 0
-            setOpenChess()
-            setChessBoardStore()
+            flipNumbers.length = 0;
+            setOpenChess();
+            setChessBoardStore();
 
             if ($(".chess").length == 0) {
-              gameOver()
+              gameOver();
             } else {
-              autoFlip()
+              autoFlip();
             }
-          }, 1000)
+          }, 1000);
         } else {
           if (isEnemyMoveAgain) {
-            setIsMoveAgain(false, false)
+            setIsMoveAgain(false, false);
 
             setTimeout(() => {
               $(".open").removeClass("open");
-              flipNumbers.length = 0
-              setOpenChess()
-              autoFlip()
-            }, 1000)
+              flipNumbers.length = 0;
+              setOpenChess();
+              autoFlip();
+            }, 1000);
           } else {
             setTimeout(() => {
-              $(".open").removeClass("open")
-              flipNumbers.length = 0
-              setOpenChess()
-              $(".picture").eq(0).addClass("action")
-              $(".picture").eq(1).removeClass("action")
-              setAction(true)
-              $("img").removeClass("disabled")
-              $(".chess").removeClass("disabled")
-            }, 1000)
+              $(".open").removeClass("open");
+              flipNumbers.length = 0;
+              setOpenChess();
+              $(".picture").eq(0).addClass("action");
+              $(".picture").eq(1).removeClass("action");
+              setAction(true);
+              $("img").removeClass("disabled");
+              $(".chess").removeClass("disabled");
+            }, 1000);
           }
         }
-      }, 1000)
-    }, result.delayTime)
-  }
+      }, 1000);
+    }, result.delayTime);
+  };
 </script>
 </html>

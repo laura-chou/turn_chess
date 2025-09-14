@@ -58,27 +58,28 @@
 <script src="./js/bootstrap.bundle.min.js"></script>
 <script src="./js/fontawesome.min.js"></script>
 <script type="module">
-  import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo } from "./js/store.js"
-  import { getRankHtml } from "./js/rank.js"
-  import { convertToBool, accordionEffect, serverError } from "./js/common.js"
+  import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo } from "./js/store.js";
+  import { getRankHtml } from "./js/rank.js";
+  import { convertToBool, accordionEffect, serverError, activePopover } from "./js/common.js";
 
   const isPlayerExist = () => {
-    return getPlayerInfo() != undefined
-  }
+    return getPlayerInfo() != undefined;
+  };
 
   $(async () => {
     if (isPlayerExist()) {
-      $("#start").text("繼續")
+      $("#start").text("繼續");
     }
-    if (convertToBool(getStoreItem("connect"))) {
+
+    if (!convertToBool(getStoreItem("connect"))) {
       Swal.fire({
         html: `<div><img src="./images/loading.svg"><h2>請稍後</h2></div>`,
         allowOutsideClick: false,
         showConfirmButton:false
-      })
-      const isConnect = await connectServer()
+      });
+      const isConnect = await connectServer();
       if (isConnect) {
-        Swal.close()
+        Swal.close();
       } else {
         Swal.fire({
           icon: "warning",
@@ -86,7 +87,7 @@
           html: "<h4>請稍後再試</h4>",
           allowOutsideClick: false,
           showConfirmButton:false
-        })
+        });
       }
     }
   })
@@ -96,8 +97,8 @@
     if (isPlayerExist()) {
       html = "start.html";
     }
-    location.href = `html/${html}`
-  })
+    location.href = `html/${html}`;
+  });
 
   $("#ranking").click(async () => {
     Swal.fire({
@@ -112,22 +113,20 @@
       if (result.value) {
         window.open("html/rank.html", "_blank")
       }
-    })
-    const response = await getTopFivePlayers()
+    });
+    const response = await getTopFivePlayers();
     if (response) {
-      $("#data").html(getRankHtml(response))
+      $("#data").html(getRankHtml(response));
+      if (response.length != 0) {
+        $("#data").on("click", ".accordion", event => {
+          accordionEffect(event.currentTarget);
+        });
 
-      $("#data").on("click", ".accordion", event => {
-        accordionEffect(event.currentTarget)
-      })
-
-      const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-      popoverTriggerList.forEach(function (popoverTriggerEl) {
-        new bootstrap.Popover(popoverTriggerEl)
-      })
+        activePopover();
+      }
     } else {
-      serverError(false)
+      serverError(false);
     }
-  })
+  });
 </script>
 </html>

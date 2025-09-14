@@ -1,181 +1,181 @@
-import { randNumberWithMin, getSkillInfo } from "../js/common.js"
-import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill } from "../js/store.js"
+import { randNumberWithMin, getSkillInfo } from "../js/common.js";
+import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill } from "../js/store.js";
 
-let isPlayerMoveAgain = false
-let isEnemyMoveAgain = false
-let isActivateEnemySkill = getActivateSkill().enemy
+let isPlayerMoveAgain = false;
+let isEnemyMoveAgain = false;
+let isActivateEnemySkill = getActivateSkill().enemy;
 
 const setIsMoveAgain = (value, isPlayer = true) => {
   if (isPlayer) {
-    isPlayerMoveAgain = value
+    isPlayerMoveAgain = value;
   } else {
-    isEnemyMoveAgain = value
+    isEnemyMoveAgain = value;
   }
-}
+};
 
-export { isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain }
+export { isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain };
 
 export const activateSkill = (id, isPlayer = true) => {
   switch (id) {
     case 1:
-      foresee(isPlayer)
-      break
+      foresee(isPlayer);
+      break;
     case 2:
-      perspective()
-      break
+      perspective();
+      break;
     case 3:
-      snoop()
-      break
+      snoop();
+      break;
     case 4:
-      moveAgain()
-      break
+      moveAgain();
+      break;
     case 5:
-      doubleElimination()
-      break
+      doubleElimination();
+      break;
     case 6:
-      stopPlayer()
-      break
+      stopPlayer();
+      break;
     case 7:
-      swapChess()
-      break
+      swapChess();
+      break;
   }
-}
+};
 
 const foresee = (isPlayer) => {
-  openRandomChess(isPlayer)
-}
+  openRandomChess(isPlayer);
+};
 
 const perspective = () => {
-  let random4 = []
+  let random4 = [];
   while(random4.length < 4){
-    const randNum = randNumberWithMin(0, $('.chess').length - 1)
+    const randNum = randNumberWithMin(0, $('.chess').length - 1);
     
     if (random4.includes(randNum)) {
-      continue
+      continue;
     }
     
-    const ele = $('.chess').eq(randNum)
+    const ele = $('.chess').eq(randNum);
     if (ele.hasClass('skill-open')) {
-      continue
+      continue;
     }
     
-    random4.push(randNum)
+    random4.push(randNum);
 
     setTimeout(() => {
-      $('.chess').eq(randNum).addClass('skill-open')
-    }, random4.length * 500)
+      $('.chess').eq(randNum).addClass('skill-open');
+    }, random4.length * 500);
   }
-}
+};
 
 const snoop = () => {
   $('.chess').addClass('open');
   setTimeout(()=>{
-    $('.chess').removeClass('open')
-  },1000)
-}
+    $('.chess').removeClass('open');
+  },1000);
+};
 
 const moveAgain = () => {
   isPlayerMoveAgain = true;
-}
+};
 
 const doubleElimination = () => {
-  openRandomChess()
+  openRandomChess();
   setTimeout(() => {
-    openRandomChess()
-  }, 2500)
-}
+    openRandomChess();
+  }, 2500);
+};
 
 const stopPlayer = () => {
   isEnemyMoveAgain = true;
-}
+};
 
 const swapChess = () => {
-  const elements = $('td').toArray()
+  const elements = $('td').toArray();
   const shuffledContents = elements
     .map(ele => $(ele).html())
-    .sort(() => 0.5 - Math.random())
+    .sort(() => 0.5 - Math.random());
 
   elements.forEach((ele, index) => {
     $(ele).html(shuffledContents[index])
-  })
-}
+  });
+};
 
 const openRandomChess = (isPlayer = false) => {
-  let numberArray = []
+  let numberArray = [];
   for (let i = 0; i < $('.chess').length; i++) {
-    numberArray.push($('.chess').eq(i).data('chess'))
+    numberArray.push($('.chess').eq(i).data('chess'));
   }
 
   const duplicateChessIndex  = numberArray.reduce((acc, value, index) => {
-    if (acc.found) return acc
+    if (acc.found) return acc;
     if (acc.values.hasOwnProperty(value)) {
-      acc.indices.push(...acc.values[value], index)
-      acc.found = true
+      acc.indices.push(...acc.values[value], index);
+      acc.found = true;
     } else {
-      acc.values[value] = [index]
+      acc.values[value] = [index];
     }
     return acc;
-  }, { values: {}, indices: [], found: false}).indices
+  }, { values: {}, indices: [], found: false}).indices;
 
   duplicateChessIndex.forEach((number, index) => {
     setTimeout(() => {
       $('.chess').eq(number).addClass('skill-open');
-    }, (index + 1) * 500)
-  })
+    }, (index + 1) * 500);
+  });
 
   setTimeout(() => {
-    $('.skill-open').fadeTo(1000, 0)
-  }, 1250)
+    $('.skill-open').fadeTo(1000, 0);
+  }, 1250);
 
   setTimeout(() => {
     $('.skill-open').remove();
-    isPlayer ? setPlayerScore() : setEnemyScore()
-  }, 2000)
-}
+    isPlayer ? setPlayerScore() : setEnemyScore();
+  }, 2000);
+};
 
 const validateSkillActivation = () => {
-  const playerInfo = getPlayerInfo()
-  const enemyInfo = getEnemyInfo()
-  let delayTime = 0
-  let reBinding = false
-  let isActive = false
+  const playerInfo = getPlayerInfo();
+  const enemyInfo = getEnemyInfo();
+  let delayTime = 0;
+  let reBinding = false;
+  let isActive = false;
 
   if (!isActivateEnemySkill) {
     switch (enemyInfo.skill) {
       case 1:
         if (playerInfo.score >= 1) {
-          isActive = true
-          delayTime = 4000
+          isActive = true;
+          delayTime = 4000;
         }
-        break
+        break;
       case 5:
         if (playerInfo.score >= 3) {
-          isActive = true
-          delayTime = 5500
+          isActive = true;
+          delayTime = 5500;
         }
-        break
+        break;
       case 6:
         if (playerInfo.score >= 2) {
-          isActive = true
-          delayTime = 2500
+          isActive = true;
+          delayTime = 2500;
         }
-        break
+        break;
       case 7:
         if (playerInfo.score + enemyInfo.score === 5) {
-          isActive = true
-          delayTime = 2000
-          reBinding = true
+          isActive = true;
+          delayTime = 2000;
+          reBinding = true;
         }
-        break
+        break;
     }
   }
-  return { isActive: isActive, delayTime: delayTime, reBinding: reBinding }
-}
+  return { isActive: isActive, delayTime: delayTime, reBinding: reBinding };
+};
 
 export const activateEnemySkill = async () => {
-  const enemyInfo = getEnemyInfo()
-  const skillInfo = await getSkillInfo(enemyInfo.skill)
-  const validate = validateSkillActivation()
+  const enemyInfo = getEnemyInfo();
+  const skillInfo = await getSkillInfo(enemyInfo.skill);
+  const validate = validateSkillActivation();
   if (validate.isActive) {
     await Swal.fire({
       title: `${enemyInfo.name}即將發動技能`,
@@ -187,29 +187,29 @@ export const activateEnemySkill = async () => {
       allowOutsideClick: false,
       confirmButtonText: '確定'
     }).then(() => {
-      showSkillEffect(enemyInfo.skill, false)
-      setActivateSkill(false)
-      isActivateEnemySkill = true
-    })
+      showSkillEffect(enemyInfo.skill, false);
+      setActivateSkill(false);
+      isActivateEnemySkill = true;
+    });
   }
-  return { delayTime: validate.delayTime, reBinding: validate.reBinding }
-}
+  return { delayTime: validate.delayTime, reBinding: validate.reBinding };
+};
 
 export const showSkillEffect = async (id, isPlayer = true) => {
-  const index = isPlayer ? 0 : 1
+  const index = isPlayer ? 0 : 1;
   const skillInfo = await getSkillInfo(id);
-  $('.skill-name').eq(index).text(skillInfo.skill)
-  $('.picture img').eq(index).addClass("disappear")
-  $('.skill-name').eq(index).removeClass("disappear")
+  $('.skill-name').eq(index).text(skillInfo.skill);
+  $('.picture img').eq(index).addClass("disappear");
+  $('.skill-name').eq(index).removeClass("disappear");
   var data = {
     in: { 
       effect: "bounceIn",
       callback: () => {
         $('.skill-name').eq(index).addClass("disappear")
-        $('.picture img').eq(index).removeClass("disappear");
+        $('.picture img').eq(index).removeClass("disappear")
         activateSkill(id, isPlayer)
       }
     }
-  }
-  $('.skill-name').eq(index).textillate(data)
-}
+  };
+  $('.skill-name').eq(index).textillate(data);
+};

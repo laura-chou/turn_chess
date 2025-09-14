@@ -1,4 +1,4 @@
-import { setTime, getTime } from "./store.js"
+import { setTime, getTime } from "./store.js";
 
 const convertToSeconds = (time) => {
   const [minutes, seconds] = time.split(":").map(Number);
@@ -6,7 +6,7 @@ const convertToSeconds = (time) => {
 }
 
 let timerInterval;
-const nowTime = getTime()
+const nowTime = getTime();
 let seconds = nowTime == undefined ? 0 : convertToSeconds(nowTime);
 
 const updateTimer = () => {
@@ -14,27 +14,27 @@ const updateTimer = () => {
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
   
-  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  setTime(formattedTime)
-  document.getElementById('timer').textContent = formattedTime;
-}
+  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  setTime(formattedTime);
+  document.getElementById("timer").textContent = formattedTime;
+};
 
-export const timeTo = (action = 'start') => {
+export const timeTo = (action = "start") => {
   switch (action) {
     case "start":
       timerInterval = setInterval(updateTimer, 1000);
-      break
-    case 'stop':
+      break;
+    case "stop":
       clearInterval(timerInterval);
-      break
-    case 'reset':
+      break;
+    case "reset":
       clearInterval(timerInterval);
       timerInterval = null;
       seconds = 0;
-      document.getElementById('timer').textContent = '00:00';
-      break
-    case 'gameOver':
-      document.getElementById('timer').textContent = getTime();
-      break
+      document.getElementById("timer").textContent = "00:00";
+      break;
+    case "gameOver":
+      document.getElementById("timer").textContent = getTime();
+      break;
   }
-}
+};
