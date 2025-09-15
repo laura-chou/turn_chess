@@ -204,4 +204,5 @@ export const removeStorage = () => {
   sessionStorage.removeItem("chess-player");
   sessionStorage.removeItem("open-chess");
   sessionStorage.removeItem("time");
+  sessionStorage.removeItem("connect");
 };

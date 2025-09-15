@@ -4,6 +4,8 @@
   --yellow: #E1E100;
   --table-tr-bg: #F0F0F0;
   --table-tr-color: #3C3C3C;
+  --table-th-font-size: 23px;
+  --table-tr-font-size: 20px;
 }
 
 .table {
@@ -13,7 +15,7 @@
 }
 
 .table thead th {
-  font-size: 24px;
+  font-size: var(--table-th-font-size);
   font-weight: 600;
   background-color: var(--light-green);
   color: var(--white);
@@ -33,7 +35,7 @@
   color: var(--table-tr-color);
   background-color: var(--table-tr-bg) !important;
   border-bottom: 2px solid var(--white);
-  font-size: 20px;
+  font-size: var(--table-tr-font-size);
 }
 
 .table tbody td {
@@ -44,7 +46,7 @@
 .top1 {
   color: var(--white) !important;
   background: linear-gradient(170deg, #FF4500, #FFd700);
-  font-size: 24px !important;
+  font-size: var(--table-th-font-size) !important;
   font-weight: bold;
 }
 
@@ -75,4 +77,11 @@
   0%   { text-shadow: 0 0 5px #E5E4E2; }
   50%  { text-shadow: 0 0 20px #F8F8FF; }
   100% { text-shadow: 0 0 5px #E5E4E2; }
+}
+
+@media (max-width:550px) {
+  :root {
+    --table-th-font-size: 18px;
+    --table-tr-font-size: 15px
+  }
 }

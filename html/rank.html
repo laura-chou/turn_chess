@@ -100,7 +100,7 @@
   $(async () => {
     const players = await getAllPlayers();
     if (players) { 
-      $("#rank").html(getRankHtml(players));
+      $("#rank").html(getRankHtml(players, true));
       if (players.length !== 0) {
         initialDataTable();
         activePopover();
