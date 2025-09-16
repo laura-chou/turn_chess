@@ -98,3 +98,11 @@ export const activePopover = () => {
     new bootstrap.Popover(popoverTriggerEl);
   });
 };
+
+export const hidePopover = () => {
+  const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+  popoverTriggerList.forEach(function (popoverTriggerEl) {
+    const instance = bootstrap.Popover.getInstance(popoverTriggerEl);
+    if (instance) instance.hide();
+  });
+}

@@ -67,7 +67,7 @@
 <script src="../js/dataTables.js"></script>
 <script src="../js/dataTables.bulma.js"></script>
 <script type="module">
-  import { accordionEffect, serverError, activePopover } from "../js/common.js";
+  import { accordionEffect, serverError, activePopover, hidePopover } from "../js/common.js";
   import { getRankHtml } from "../js/rank.js";
   import { getAllPlayers } from "../js/store.js";
 
@@ -95,40 +95,49 @@
         emptyTable: emptyMsg
       }
     });
+    activePopover();
   };
 
-  $(async () => {
-    const players = await getAllPlayers();
-    if (players) { 
-      $("#rank").html(getRankHtml(players, true));
-      if (players.length !== 0) {
-        initialDataTable();
-        activePopover();
-      }
-    } else {
-      serverError(false);
+  const players = await getAllPlayers();
+  if (players) { 
+    $("#rank").html(getRankHtml(players, true));
+    if (players.length !== 0) {
+      initialDataTable();
     }
-  });
+  } else {
+    serverError(false);
+  }
 
   $("#search").on("change", () => {
+    hidePopover();
     const searchValue = $("#search").val();
     const searchData = players.filter(item =>
       item.players.some(p => p.player.includes(searchValue))
     );
-    $("#rank").html(getRankHtml(searchData));
-    initialDataTable();
+    $("#rank").html(getRankHtml(searchData, true));
+    if (searchData.length != 0) {
+      initialDataTable();
+    }
   });
 
   $("#clear").click(() => {
     if ($("#search").val() !== "") {
+      hidePopover();
       $("#search").val("");
-      $("#rank").html(getRankHtml(players));
+      $("#rank").html(getRankHtml(players, true));
       initialDataTable();
     }
   });
 
   $("#rank").on("click", ".accordion", event => {
     accordionEffect(event.currentTarget);
+  });
+
+  $('#DataTables_Table_0').on('page.dt', () => {
+    hidePopover();
+    setTimeout(() => {
+      activePopover();
+    }, 0);
   });
 </script>
 </html>
