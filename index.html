@@ -59,7 +59,7 @@
 <script src="./js/fontawesome.min.js"></script>
 <script type="module">
   import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo } from "./js/store.js";
-  import { getRankHtml } from "./js/rank.js";
+  import { getTopRankHtml } from "./js/rank.js";
   import { convertToBool, accordionEffect, serverError, activePopover } from "./js/common.js";
 
   const isPlayerExist = () => {
@@ -119,7 +119,7 @@
     });
     const response = await getTopFivePlayers();
     if (response) {
-      $("#data").html(getRankHtml(response));
+      $("#data").html(getTopRankHtml(response));
       if (response.length != 0) {
         $("#data").on("click", ".accordion", event => {
           accordionEffect(event.currentTarget);

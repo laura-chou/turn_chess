@@ -63,6 +63,13 @@ export const accordionEffect = (element) => {
   $(angleElement).attr("class", `fa-solid fa-angle-${state}`);
 };
 
+export const isNullOrEmpty = (value) => {
+  if (value == null) {
+    return true;
+  }
+  return value.trim().length === 0;
+};
+
 export const convertToBool = (value) => {
   if (!value) {
     return false;

@@ -33,7 +33,7 @@ const getPlayerHtml = (players, showScore) => {
           ${getMorePlayers(players.slice(1), showScore)}`;
 };
 
-const getInfoHtml = (datas, showScore = false) => {
+const getInfoHtml = (datas, showScore) => {
   let info = "";
   if (datas.length > 0) {
     for (const data of datas) {
@@ -49,14 +49,26 @@ const getInfoHtml = (datas, showScore = false) => {
   return info;
 };
 
-export const getRankHtml = (data, showScore = false) => {
-  const html = (data.length === 0) ? `<tr><td colspan="3">暫無玩家</td></tr>` : getInfoHtml(data, showScore);
-  const scoreField = showScore ? " (分數)" : "";
-  return `<table class="table" style="margin-top: 6px">
+export const getRankHtml = (data) => {
+  return `<table class="table">
             <thead>
               <tr>
                 <th>排名</th>
-                <th>姓名${scoreField}</th>
+                <th>姓名 (分數)</th>
+                <th>時間</th>
+              </tr>
+            </thead>
+            <tbody>${getInfoHtml(data, true)}</tbody>
+          </table>`;
+};
+
+export const getTopRankHtml = (data) => {
+  const html = (data.length === 0) ? `<tr><td colspan="3">暫無玩家</td></tr>` : getInfoHtml(data, false);
+  return `<table class="table">
+            <thead>
+              <tr>
+                <th>排名</th>
+                <th>姓名</th>
                 <th>時間</th>
               </tr>
             </thead>

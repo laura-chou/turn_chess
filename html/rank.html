@@ -48,7 +48,7 @@
     <div class="logo">
       <img src="../images/rank.png">
     </div>
-    <div class="search">
+    <div class="search mt-1">
       <input id="search" type="text" autocomplete="off" placeholder="請輸入姓名">
       <button id="clear">
         <i class="fa-solid fa-x"></i>
@@ -67,7 +67,7 @@
 <script src="../js/dataTables.js"></script>
 <script src="../js/dataTables.bulma.js"></script>
 <script type="module">
-  import { accordionEffect, serverError, activePopover, hidePopover } from "../js/common.js";
+  import { isNullOrEmpty, accordionEffect, serverError, activePopover, hidePopover } from "../js/common.js";
   import { getRankHtml } from "../js/rank.js";
   import { getAllPlayers } from "../js/store.js";
 
@@ -100,31 +100,29 @@
 
   const players = await getAllPlayers();
   if (players) { 
-    $("#rank").html(getRankHtml(players, true));
-    if (players.length !== 0) {
-      initialDataTable();
-    }
+    $("#rank").html(getRankHtml(players));
+    initialDataTable();
   } else {
     serverError(false);
   }
 
   $("#search").on("change", () => {
-    hidePopover();
-    const searchValue = $("#search").val();
-    const searchData = players.filter(item =>
-      item.players.some(p => p.player.includes(searchValue))
-    );
-    $("#rank").html(getRankHtml(searchData, true));
-    if (searchData.length != 0) {
-      initialDataTable();
+    if (!isNullOrEmpty($("#search").val())) {
+      hidePopover();
+      const searchValue = $("#search").val();
+      const searchData = players.filter(item =>
+        item.players.some(p => p.player.includes(searchValue))
+      );
+      $("#rank").html(getRankHtml(searchData));
+      initialDataTable("查無玩家");
     }
   });
 
   $("#clear").click(() => {
-    if ($("#search").val() !== "") {
+    if (!isNullOrEmpty($("#search").val())) {
       hidePopover();
       $("#search").val("");
-      $("#rank").html(getRankHtml(players, true));
+      $("#rank").html(getRankHtml(players));
       initialDataTable();
     }
   });
@@ -137,7 +135,7 @@
     hidePopover();
     setTimeout(() => {
       activePopover();
-    }, 0);
+    }, 1);
   });
 </script>
 </html>
