@@ -55,16 +55,20 @@ const perspective = () => {
     }
     
     const ele = $('.chess').eq(randNum);
-    if (ele.hasClass('skill-open')) {
+    if (ele.hasClass('perspective')) {
       continue;
     }
     
     random4.push(randNum);
 
     setTimeout(() => {
-      $('.chess').eq(randNum).addClass('skill-open');
+      $('.chess').eq(randNum).addClass('perspective');
     }, random4.length * 500);
   }
+
+  setTimeout(()=> {
+    $(".chess").removeClass("disabled");
+  }, 2250)
 };
 
 const snoop = () => {
@@ -72,10 +76,17 @@ const snoop = () => {
   setTimeout(()=>{
     $('.chess').removeClass('open');
   },1000);
+
+  setTimeout(()=> {
+    $(".chess").removeClass("disabled");
+  }, 1250)
 };
 
 const moveAgain = () => {
   isPlayerMoveAgain = true;
+  setTimeout(()=> {
+    $(".chess").removeClass("disabled");
+  }, 250)
 };
 
 const doubleElimination = () => {
@@ -119,18 +130,24 @@ const openRandomChess = (isPlayer = false) => {
 
   duplicateChessIndex.forEach((number, index) => {
     setTimeout(() => {
-      $('.chess').eq(number).addClass('skill-open');
+      $('.chess').eq(number).addClass('foresee');
     }, (index + 1) * 500);
   });
 
   setTimeout(() => {
-    $('.skill-open').fadeTo(1000, 0);
+    $('.foresee').fadeTo(1000, 0);
   }, 1250);
 
   setTimeout(() => {
-    $('.skill-open').remove();
+    $('.foresee').remove();
     isPlayer ? setPlayerScore() : setEnemyScore();
   }, 2000);
+
+  if (isPlayer) {
+    setTimeout(()=> {
+      $(".chess").removeClass("disabled");
+    }, 2250)
+  }
 };
 
 const validateSkillActivation = () => {

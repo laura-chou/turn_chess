@@ -103,12 +103,12 @@ table td {
   backface-visibility: hidden;
 }
 
-.open, 
-.skill-open {
+.open, .foresee, .perspective {
   transform: rotateX(0deg);
 }
 
-.skill-open.open {
+.perspective.open,
+.perspective.foresee {
   background-color: #ECF5FF;
 }
 
@@ -232,7 +232,7 @@ table td {
     transform: rotateX(180deg);
   }
   .open,
-  .skill-open {
+  .foresee {
     transform: rotateX(0deg);
   }
 

@@ -92,6 +92,7 @@
         cancelButtonText: "取消"
       }).then( async (result) => {
         if (result.value) { 
+          $(".chess").addClass("disabled");
           $("#skill").addClass("activated");
           showSkillEffect(playerInfo.id);
           setActivateSkill(true);
