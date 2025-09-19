@@ -58,13 +58,9 @@
 <script src="./js/bootstrap.bundle.min.js"></script>
 <script src="./js/fontawesome.min.js"></script>
 <script type="module">
-  import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo } from "./js/store.js";
+  import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo, isPlayerExist } from "./js/store.js";
   import { getTopRankHtml } from "./js/rank.js";
   import { convertToBool, accordionEffect, serverError, activePopover } from "./js/common.js";
-
-  const isPlayerExist = () => {
-    return getPlayerInfo() != undefined;
-  };
 
   $(async () => {
     if (isPlayerExist()) {

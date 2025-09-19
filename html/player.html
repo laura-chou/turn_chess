@@ -85,9 +85,12 @@
 <script src="../js/bootstrap.bundle.min.js"></script>
 <script type="module">
   import { pathName, isNullOrEmpty, getRandEnemy, getSkillInfo } from "../js/common.js"
-  import { setPlayerInfo, setEnemyInfo, setAction, setActivateSkill } from "../js/store.js"
+  import { setPlayerInfo, setEnemyInfo, setAction, setActivateSkill, isPlayerExist } from "../js/store.js"
 
   $(function () {
+    if (isPlayerExist()) {
+      history.go(-1);
+    }
     const navItemEle = $(".nav-item").first().find("button");
     showSkillInfo(navItemEle);
   });

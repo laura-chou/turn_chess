@@ -109,7 +109,7 @@ table td {
 
 .perspective.open,
 .perspective.foresee {
-  background-color: #ECF5FF;
+  background-color: var(--action-white);
 }
 
 .action {
@@ -223,14 +223,19 @@ table td {
   .chess-board {
     position: relative;
   }
+
   #board {
     position: absolute;
     top: 0;
     padding: 15px 0;
   }
+
   .chess {
     transform: rotateX(180deg);
+    width: var(--mobile-board-width);
+    height: var(--mobile-board-height);
   }
+
   .open, .foresee, .perspective {
     transform: rotateX(0deg);
   }
@@ -253,8 +258,7 @@ table td {
     height: var(--mobile-board-height);
   }
 
-  .chess {
-    width: var(--mobile-board-width);
-    height: var(--mobile-board-height);
+  .skill-name {
+    font-size: 60px;
   }
 }

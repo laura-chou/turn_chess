@@ -1,4 +1,4 @@
-import { getEnemyData } from "../js/common.js";
+import { getEnemyData, isNullOrEmpty } from "../js/common.js";
 
 const domain = "http://localhost:3000";
 const turnChessUrl = `${domain}/turn-chess`;
@@ -194,6 +194,10 @@ export const connectServer = () => {
       }
     });
   });
+};
+
+export const isPlayerExist = () => {
+  return getPlayerInfo() != undefined;
 };
 
 export const removeStorage = () => {

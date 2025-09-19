@@ -29,7 +29,7 @@ html,body {
 }
 .pagination-link {
   font-weight: bold;
-  border-color: gray;
+  border-color: var(--light-gray);
 }
 
 /* ---- search ---- */
@@ -50,13 +50,13 @@ input[type=text] {
   background-repeat: no-repeat;
   padding: 10px 20px 10px 40px;
   transition: width 0.4s ease-in-out;
-  box-shadow: 1px 1px 10px #D0D0D0;
+  box-shadow: 1px 1px 10px var(--light-gray);
 }
 
 #clear {
   border: 0;
   border-radius: .25em;
-  background-color: #ea5455;
+  background-color: var(--red);
   color: var(--white);
   font-size: 15px;
   padding: 10px 20px;

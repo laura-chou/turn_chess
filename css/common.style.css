@@ -1,10 +1,10 @@
 :root {
   --black: #000;
   --white: #FCFCFC;
-  --action-white:#F0F0F0;
+  --action-white:#ECF5FF;
   --light-gray: #ccc;
   --dark-gray: #5B5B5B;
-  --error-red: #FF2D2D;
+  --red: #ea5455;
   --light-green: #00A600;
   --dark-green:#2D871A;
   --board-width: 90px;

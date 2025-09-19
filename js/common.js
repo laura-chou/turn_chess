@@ -112,4 +112,4 @@ export const hidePopover = () => {
     const instance = bootstrap.Popover.getInstance(popoverTriggerEl);
     if (instance) instance.hide();
   });
-}
+};
