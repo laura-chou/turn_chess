@@ -1,5 +1,6 @@
 import { randNumberWithMin, getSkillInfo } from "../js/common.js";
-import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill } from "../js/store.js";
+import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore,
+  getActivateSkill, setActivateSkill } from "../js/store.js";
 
 let isPlayerMoveAgain = false;
 let isEnemyMoveAgain = false;

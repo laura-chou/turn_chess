@@ -1,6 +1,6 @@
 import { getEnemyData, isNullOrEmpty } from "../js/common.js";
 
-const domain = "http://localhost:3000";
+const domain = "https://game-api.up.railway.app";
 const turnChessUrl = `${domain}/turn-chess`;
 
 export const setStoreItem = (key, value) => {
@@ -111,7 +111,7 @@ export const setAction = (isPlayer) => {
 
 export const getOpenChess = () => {
   const data = getStoreItem("open-chess");
-  if (data == undefined) {
+  if (data == undefined || isNullOrEmpty(data)) {
     return [];
   }
   return data.split(",").map(Number);
