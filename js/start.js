@@ -1,6 +1,6 @@
 import { randNumberWithMin, getSkillInfo } from "../js/common.js";
 import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore,
-  getActivateSkill, setActivateSkill } from "../js/store.js";
+  getActivateSkill, setActivateSkill, setPerspective } from "../js/store.js";
 
 let isPlayerMoveAgain = false;
 let isEnemyMoveAgain = false;
@@ -66,6 +66,8 @@ const perspective = () => {
       $('.chess').eq(randNum).addClass('perspective');
     }, random4.length * 500);
   }
+
+  setPerspective(random4);
 
   setTimeout(()=> {
     $(".chess").removeClass("disabled");

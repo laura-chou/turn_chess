@@ -87,7 +87,7 @@
   import { pathName, isNullOrEmpty, getRandEnemy, getSkillInfo } from "../js/common.js"
   import { setPlayerInfo, setEnemyInfo, setAction, setActivateSkill, isPlayerExist } from "../js/store.js"
 
-  $(function () {
+  $(() => {
     if (isPlayerExist()) {
       history.go(-1);
     }

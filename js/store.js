@@ -121,6 +121,33 @@ export const setOpenChess = (openChess = []) => {
   setStoreItem("open-chess", openChess.toString());
 };
 
+export const getPerspective = () => {
+  const data = getStoreItem("perspective");
+  if (data == undefined || isNullOrEmpty(data)) {
+    return [];
+  }
+  return data.split(",").map(Number);
+};
+
+export const setPerspective = (data = []) => {
+  let indexArr = data;
+
+  if (data.length == 0) {
+    const chessElement = document.querySelectorAll("div.chess");
+    chessElement.forEach((element, index) => {
+      if (element.classList.contains("perspective")) {
+        indexArr.push(index);
+      }
+    });
+  }
+
+  if (indexArr.length > 0) {
+    setStoreItem("perspective", indexArr.toString());
+  } else {
+    sessionStorage.removeItem("perspective");
+  }
+};
+
 export const getTopFivePlayers = () => {
   return new Promise((resolve, reject) => {
     $.ajax({
@@ -208,5 +235,6 @@ export const removeStorage = () => {
   sessionStorage.removeItem("chess-player");
   sessionStorage.removeItem("open-chess");
   sessionStorage.removeItem("time");
+  sessionStorage.removeItem("perspective");
   sessionStorage.removeItem("connect");
 };

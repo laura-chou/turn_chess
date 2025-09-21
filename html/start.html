@@ -54,20 +54,27 @@
   import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain } from "../js/start.js";
   import { setChessBoardStore, getChessBoardStore, getPlayerInfo, getEnemyInfo,
           setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill,
-          getAction, setAction, getOpenChess, setOpenChess, insertPlayer } from "../js/store.js";
+          getAction, setAction, getOpenChess, setOpenChess, insertPlayer,
+          setPerspective, getPerspective } from "../js/store.js";
 
   let flipNumbers = [];
 
-  window.addEventListener("beforeunload", (e) => {
-    e.preventDefault();
-    e.returnValue = '';
-  });
+  const isGameOver = () => {
+    return $(".chess").length == 0
+  }
 
-  $(function () {
+  $(() => {
+    window.addEventListener("beforeunload", (e) => {
+      if (!isGameOver()) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
     initChessBoard();
     initRoleInfo();
 
-    if ($(".chess").length == 0) {
+    if (isGameOver()) {
       timeTo("gameOver");
       gameOver();
     } else {
@@ -183,6 +190,10 @@
         }
       };
 
+      getPerspective().forEach(index => {
+        $(".chess").eq(index).addClass("perspective");
+      });
+
       getOpenChess().forEach(index => {
         clickChess({currentTarget: $(".chess").eq(index)});
       });
@@ -242,6 +253,7 @@
               flipNumbers.length = 0;
               setOpenChess();
               setChessBoardStore();
+              setPerspective();
               if ($(".chess").length == 0) {
                 gameOver();
               }
@@ -370,6 +382,7 @@
             flipNumbers.length = 0;
             setOpenChess();
             setChessBoardStore();
+            setPerspective();
 
             if ($(".chess").length == 0) {
               gameOver();
