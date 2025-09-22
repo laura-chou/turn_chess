@@ -1,4 +1,4 @@
-import { randNumberWithMin, getSkillInfo } from "../js/common.js";
+import { pathName, randNumberWithMin, getSkillInfo } from "../js/common.js";
 import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore,
   getActivateSkill, setActivateSkill, setPerspective } from "../js/store.js";
 
@@ -63,6 +63,7 @@ const perspective = () => {
     random4.push(randNum);
 
     setTimeout(() => {
+      audioEffect("flip");
       $('.chess').eq(randNum).addClass('perspective');
     }, random4.length * 500);
   }
@@ -75,6 +76,7 @@ const perspective = () => {
 };
 
 const snoop = () => {
+  audioEffect("flip");
   $('.chess').addClass('open');
   setTimeout(()=>{
     $('.chess').removeClass('open');
@@ -133,11 +135,13 @@ const openRandomChess = (isPlayer = false) => {
 
   duplicateChessIndex.forEach((number, index) => {
     setTimeout(() => {
+      audioEffect("flip");
       $('.chess').eq(number).addClass('foresee');
     }, (index + 1) * 500);
   });
 
   setTimeout(() => {
+    audioEffect("offset");
     $('.foresee').fadeTo(1000, 0);
   }, 1250);
 
@@ -163,25 +167,25 @@ const validateSkillActivation = () => {
   if (!isActivateEnemySkill) {
     switch (enemyInfo.skill) {
       case 1:
-        if (playerInfo.score >= 1) {
+        if (playerInfo.score >= 3) {
           isActive = true;
           delayTime = 4000;
         }
         break;
       case 5:
-        if (playerInfo.score >= 3) {
+        if (playerInfo.score >= 5) {
           isActive = true;
           delayTime = 5500;
         }
         break;
       case 6:
-        if (playerInfo.score >= 2) {
+        if (playerInfo.score >= 4) {
           isActive = true;
           delayTime = 2500;
         }
         break;
       case 7:
-        if (playerInfo.score + enemyInfo.score === 5) {
+        if (playerInfo.score + enemyInfo.score === 7) {
           isActive = true;
           delayTime = 2000;
           reBinding = true;
@@ -207,6 +211,7 @@ export const activateEnemySkill = async () => {
       allowOutsideClick: false,
       confirmButtonText: '確定'
     }).then(() => {
+      audioEffect("enemy-skill");
       showSkillEffect(enemyInfo.skill, false);
       setActivateSkill(false);
       isActivateEnemySkill = true;
@@ -232,4 +237,14 @@ export const showSkillEffect = async (id, isPlayer = true) => {
     }
   };
   $('.skill-name').eq(index).textillate(data);
+};
+
+export const isGameOver = () => {
+  return $(".chess").length == 0
+}
+
+export const audioEffect = (src) => {
+  const audio = new Audio();
+  audio.src = `${pathName}music/${src}.mp3`;
+  audio.play();
 };

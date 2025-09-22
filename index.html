@@ -60,7 +60,7 @@
 <script type="module">
   import { connectServer, getStoreItem, getTopFivePlayers, getPlayerInfo, isPlayerExist } from "./js/store.js";
   import { getTopRankHtml } from "./js/rank.js";
-  import { convertToBool, accordionEffect, serverError, activePopover } from "./js/common.js";
+  import { convertToBool, accordionEffect, serverError, activePopover, hidePopover } from "./js/common.js";
 
   $(async () => {
     if (isPlayerExist()) {
@@ -108,6 +108,9 @@
       showCloseButton: true,
       html: `<div id="data"><img src="./images/loading.svg"></div>`,
       confirmButtonText: "更多",
+      willClose: () => {
+        hidePopover();
+      }
     }).then((result) => {
       if (result.value) {
         window.open("html/rank.html", "_blank")

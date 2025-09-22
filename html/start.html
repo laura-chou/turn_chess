@@ -51,17 +51,14 @@
 <script type="module">
   import { pathName, randNumberWithMin, getSkillInfo, redirectToHome, serverError } from "../js/common.js";
   import { timeTo } from "../js/timer.js";
-  import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain, setIsMoveAgain } from "../js/start.js";
+  import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain,
+          setIsMoveAgain, isGameOver, audioEffect } from "../js/start.js";
   import { setChessBoardStore, getChessBoardStore, getPlayerInfo, getEnemyInfo,
           setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill,
           getAction, setAction, getOpenChess, setOpenChess, insertPlayer,
           setPerspective, getPerspective } from "../js/store.js";
 
   let flipNumbers = [];
-
-  const isGameOver = () => {
-    return $(".chess").length == 0
-  }
 
   $(() => {
     window.addEventListener("beforeunload", (e) => {
@@ -101,6 +98,7 @@
         cancelButtonText: "取消"
       }).then( async (result) => {
         if (result.value) { 
+          audioEffect("player-skill");
           $(".chess").addClass("disabled");
           $("#skill").addClass("activated");
           showSkillEffect(playerInfo.id);
@@ -126,7 +124,7 @@
         timeTo();
       });
     });
-  })
+  });
 
   const initRoleInfo = () => {
     const playerInfo = getPlayerInfo();
@@ -236,6 +234,7 @@
   };
 
   const clickChess = (event) => {
+    audioEffect("flip");
     const ele = event.currentTarget;
     if (flipNumbers.length < 2 && !$(ele).hasClass("open")) {
       flipNumbers.push($(ele).data("chess"));
@@ -245,6 +244,7 @@
         if (flipNumbers.length == 2) {
           const isEqual = flipNumbers.every(num => num === flipNumbers[0]);
           if (isEqual) {
+            audioEffect("offset");
             $(".open").fadeTo(1000, 0);
             setPlayerScore();
 
@@ -282,6 +282,7 @@
     const enemyInfo = getEnemyInfo();
     if (chess == 0) {
       if (playerInfo.score == enemyInfo.score) {
+        audioEffect("draw");
         await Swal.fire({
           allowOutsideClick: false,
           html: `<div>
@@ -291,6 +292,7 @@
           confirmButtonText: "確定"
         });
       } else if (playerInfo.score < enemyInfo.score) {
+        audioEffect("failure");
         await Swal.fire({
           allowOutsideClick: false,
           html: `<div>
@@ -303,6 +305,7 @@
           confirmButtonText: "確定"
         });
       } else {
+        audioEffect("victory");
         await Swal.fire({
           allowOutsideClick: false,
           html: `<div>
@@ -320,6 +323,7 @@
           const result = await insertPlayer(message);
           if (result) {
             if (result?.data?.topFive) {
+              audioEffect("top-five");
               Swal.fire({
                 html: `<img class="over" src="${pathName}images/brain.png"/>
                         <h2 style="margin-bottom:0">前五名達成！你的記憶力已經無人能忽視！</h2>`,
@@ -361,6 +365,7 @@
         if (!flipNumbers.includes(number)) {
           flipNumbers.push(number);
           setTimeout(() => {
+            audioEffect("flip");
             $(".chess").eq(randNum).addClass("open");
             setOpenChess(getOpenChessIndex());
           }, flipNumbers.length * 500);
@@ -374,6 +379,7 @@
       setTimeout(() => {
         const isEqual = flipNumbers.every(num => num === flipNumbers[0]);
         if (isEqual) {
+          audioEffect("offset");
           $(".open").fadeTo(1000, 0);
           setEnemyScore();
           
