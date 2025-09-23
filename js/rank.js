@@ -1,3 +1,5 @@
+import { pathName } from "./common.js";
+
 const getRank = (rank) => {
   return rank == 1 ? `<i class="fa-solid fa-trophy trophy"></i>` : rank;
 };
@@ -11,8 +13,9 @@ const getMorePlayers = (players, showScore) => {
     let html = "";
     for (const player of players) {
       const scoreField = showScore ? ` (${player.score})` : "";
+      const imgPath = showScore ? "/" : pathName;
       html += `<div class="player mt-2">
-                <img src="../images/player${player.character}.png" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="${player.message}"/>
+                <img src="..${imgPath}images/player${player.character}.png" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="${player.message}"/>
                 <span>${player.player}${scoreField}</span>
               </div>`;
     }
@@ -26,8 +29,9 @@ const getMorePlayers = (players, showScore) => {
 
 const getPlayerHtml = (players, showScore) => {
   const scoreField = showScore ? ` (${players[0].score})` : "";
+  const imgPath = showScore ? "/" : pathName;
   return `<div class="player">
-            <img src="../images/player${players[0].character}.png" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="${players[0].message}"/>
+            <img src="..${imgPath}images/player${players[0].character}.png" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="${players[0].message}"/>
             <span>${players[0].player}${scoreField}</span>
           </div>
           ${getMorePlayers(players.slice(1), showScore)}`;
