@@ -9,8 +9,8 @@
   --dark-green:#2D871A;
   --board-width: 90px;
   --board-height: 90px;
-  --mobile-board-width: 70px;
-  --mobile-board-height: 70px;
+  --mobile-board-width: 55px;
+  --mobile-board-height: 55px;
 }
 
 @font-face {

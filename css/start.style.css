@@ -241,24 +241,36 @@ table td {
   }
 
   .top {
-    height: 7%;
-    font-size: 40px;
+    height: 8%;
+    font-size: 30px;
+  }
+
+  #skill,#rule {
+    width: 40px;
+  }
+
+  .name {
+    font-size: 25px;
   }
 
   .picture img {
-    width: 70px;
+    width: 60px;
   }
 
   .info {
     height: 10%;
   }
 
+  .skill-name {
+    font-size: 50px;
+  }
+
+  .chess-board {
+    height: 77%;
+  }
+
   table td {
     width: var(--mobile-board-width);
     height: var(--mobile-board-height);
-  }
-
-  .skill-name {
-    font-size: 60px;
   }
 }
