@@ -219,7 +219,7 @@ table td {
   font-weight: bold;
 }
 
-@media (max-width: 790px) {
+@media (max-width: 780px) {
   .chess-board {
     position: relative;
   }

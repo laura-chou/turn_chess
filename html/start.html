@@ -138,7 +138,7 @@
 
     $(".score span").eq(0).text(playerInfo.score);
     $(".score span").eq(1).text(enemyInfo.score);
-    
+
     const index = getAction() ? 0 : 1;
     $(".picture").eq(index).addClass("action");
     if (!getAction()) {
@@ -149,7 +149,7 @@
       $("#skill").addClass("activated");
     }
   };
-  
+
   const initChessBoard = () => {
     var pageWidth = document.documentElement.clientWidth;
     let grids = [4, 8];
@@ -382,7 +382,7 @@
           audioEffect("offset");
           $(".open").fadeTo(1000, 0);
           setEnemyScore();
-          
+
           setTimeout(() => {
             $(".open").remove();
             flipNumbers.length = 0;

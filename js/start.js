@@ -1,6 +1,7 @@
 import { pathName, randNumberWithMin, getSkillInfo } from "../js/common.js";
 import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore,
   getActivateSkill, setActivateSkill, setPerspective } from "../js/store.js";
+import { timeTo } from "../js/timer.js";
 
 let isPlayerMoveAgain = false;
 let isEnemyMoveAgain = false;
@@ -201,6 +202,7 @@ export const activateEnemySkill = async () => {
   const skillInfo = await getSkillInfo(enemyInfo.skill);
   const validate = validateSkillActivation();
   if (validate.isActive) {
+    timeTo("stop");
     await Swal.fire({
       title: `${enemyInfo.name}即將發動技能`,
       html: `<div class='skill-info'>
@@ -215,6 +217,7 @@ export const activateEnemySkill = async () => {
       showSkillEffect(enemyInfo.skill, false);
       setActivateSkill(false);
       isActivateEnemySkill = true;
+      timeTo();
     });
   }
   return { delayTime: validate.delayTime, reBinding: validate.reBinding };

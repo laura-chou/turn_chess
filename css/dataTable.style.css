@@ -30,8 +30,8 @@
 
 .table tbody tr {
   color: var(--table-tr-color);
-  background-color: var(--table-tr-bg) !important;
-  border-bottom: 2px solid var(--white);
+  background-color: var(--table-tr-bg);
+  border-bottom: 1px solid var(--white);
   font-size: var(--table-tr-font-size);
 }
 
@@ -42,7 +42,7 @@
 
 .top1 {
   color: var(--white) !important;
-  background: linear-gradient(170deg, #FF4500, #FFd700);
+  background-color: #FFA500 !important;
   font-size: var(--table-th-font-size) !important;
   font-weight: bold;
 }
