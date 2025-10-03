@@ -62,10 +62,15 @@ export const setEnemyInfo = (id) => {
     name: data.name,
     score: 0,
     skill: data.skill,
-    message: data.message
+    message: data.message,
+    successRate: data.successRate
   };
   setStoreItem("chess-enemy",  JSON.stringify(enemyInfo));
 };
+
+export const getEnemySuccessRate = () => {
+  return getEnemyInfo().successRate;
+}
 
 export const setEnemyScore = () => {
   let enemyInfo = getEnemyInfo();

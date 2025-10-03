@@ -56,7 +56,7 @@
   import { setChessBoardStore, getChessBoardStore, getPlayerInfo, getEnemyInfo,
           setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill,
           getAction, setAction, getOpenChess, setOpenChess, insertPlayer,
-          setPerspective, getPerspective } from "../js/store.js";
+          setPerspective, getPerspective, getEnemySuccessRate } from "../js/store.js";
 
   let flipNumbers = [];
 
@@ -239,37 +239,36 @@
     if (flipNumbers.length < 2 && !$(ele).hasClass("open")) {
       flipNumbers.push($(ele).data("chess"));
       $(ele).addClass("open");
-      if (getAction()) {
+      if (flipNumbers.length == 2 && getAction()) {
         setOpenChess(getOpenChessIndex());
-        if (flipNumbers.length == 2) {
-          const isEqual = flipNumbers.every(num => num === flipNumbers[0]);
-          if (isEqual) {
-            audioEffect("offset");
-            $(".open").fadeTo(1000, 0);
-            setPlayerScore();
 
-            setTimeout(() => {
-              $(".open").remove();
-              flipNumbers.length = 0;
-              setOpenChess();
-              setChessBoardStore();
-              setPerspective();
-              if ($(".chess").length == 0) {
-                gameOver();
-              }
-            }, 1000);
-          } else {
-            setTimeout(() => {
-              $(".open").removeClass("open");
-              flipNumbers.length = 0;
-              setOpenChess();
-              if (isPlayerMoveAgain) {
-                setIsMoveAgain(false);
-              } else {
-                autoFlip();
-              }
-            }, 1000);
-          }
+        const [a, b] = flipNumbers;
+        const isEqual = a === b;
+
+        if (isEqual) {
+          audioEffect("offset");
+          $(".open").fadeTo(1000, 0);
+          setPlayerScore();
+
+          setTimeout(() => {
+            $(".open").remove();
+            resetFlipState();
+            setChessBoardStore();
+            setPerspective();
+            if ($(".chess").length == 0) {
+              gameOver();
+            }
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            $(".open").removeClass("open");
+            resetFlipState();
+            if (isPlayerMoveAgain) {
+              setIsMoveAgain(false);
+            } else {
+              autoFlip();
+            }
+          }, 1000);
         }
       }
     }
@@ -290,6 +289,8 @@
                 </div>
                 <div class="draw">平手</div>`,
           confirmButtonText: "確定"
+        }).then(() => {
+          redirectToHome();
         });
       } else if (playerInfo.score < enemyInfo.score) {
         audioEffect("failure");
@@ -303,6 +304,8 @@
                   <img src="${pathName}images/robot${enemyInfo.id}.png"/>
                 </div>`,
           confirmButtonText: "確定"
+        }).then(() => {
+          redirectToHome();
         });
       } else {
         audioEffect("victory");
@@ -354,30 +357,38 @@
 
     setTimeout(() => {
       let randNumber = [];
-      while (flipNumbers.length != 2) {
-        const randNum = randNumberWithMin(0, $(".chess").length - 1);
-        if (randNumber.includes(randNum)) {
-          continue;
-        }
+      const matchIndices = getMatchedIndicesByRate();
 
-        randNumber.push(randNum);
-        const number = $(".chess").eq(randNum).data("chess");
-        if (!flipNumbers.includes(number)) {
-          flipNumbers.push(number);
-          setTimeout(() => {
-            audioEffect("flip");
-            $(".chess").eq(randNum).addClass("open");
-            setOpenChess(getOpenChessIndex());
-          }, flipNumbers.length * 500);
+      if (matchIndices) {
+        randNumber = matchIndices;
+      } else {
+        while (randNumber.length < 2) {
+          const randNum = randNumberWithMin(0, $(".chess").length - 1);
+          if (!randNumber.includes(randNum)) {
+            randNumber.push(randNum);
+          }
         }
       }
 
-      if(result.reBinding) {
+      randNumber.forEach((randNum, index) => {
+        const number = $(".chess").eq(randNum).data("chess");
+        flipNumbers.push(number);
+
+        setTimeout(() => {
+          audioEffect("flip");
+          $(".chess").eq(randNum).addClass("open");
+          setOpenChess(getOpenChessIndex());
+        }, (index + 1) * 500);
+      });
+
+      if (result.reBinding) {
         $(".chess").on("click", clickChess);
       }
 
       setTimeout(() => {
-        const isEqual = flipNumbers.every(num => num === flipNumbers[0]);
+        const [a, b] = flipNumbers;
+        const isEqual = a === b;
+
         if (isEqual) {
           audioEffect("offset");
           $(".open").fadeTo(1000, 0);
@@ -385,12 +396,11 @@
 
           setTimeout(() => {
             $(".open").remove();
-            flipNumbers.length = 0;
-            setOpenChess();
+            resetFlipState();
             setChessBoardStore();
             setPerspective();
 
-            if ($(".chess").length == 0) {
+            if ($(".chess").length === 0) {
               gameOver();
             } else {
               autoFlip();
@@ -402,15 +412,13 @@
 
             setTimeout(() => {
               $(".open").removeClass("open");
-              flipNumbers.length = 0;
-              setOpenChess();
+              resetFlipState();
               autoFlip();
             }, 1000);
           } else {
             setTimeout(() => {
               $(".open").removeClass("open");
-              flipNumbers.length = 0;
-              setOpenChess();
+              resetFlipState();
               $(".picture").eq(0).addClass("action");
               $(".picture").eq(1).removeClass("action");
               setAction(true);
@@ -422,5 +430,33 @@
       }, 1000);
     }, result.delayTime);
   };
+
+  const getMatchedIndicesByRate = () => {
+    const map = {};
+    const chessElements = $(".chess").not(".open");
+
+    chessElements.each((i, el) => {
+      const num = $(el).data("chess");
+      if (!map[num]) map[num] = [];
+      map[num].push(i);
+    });
+
+    const candidates = Object.entries(map).filter(([num, indices]) => indices.length >= 2);
+
+    if (candidates.length === 0) return null;
+
+    const [num, indices] = candidates[Math.floor(Math.random() * candidates.length)];
+
+    if (Math.random() < getEnemySuccessRate()) {
+      return indices.slice(0, 2);
+    }
+
+    return null;
+    }
+
+  const resetFlipState = () => {
+    flipNumbers.length = 0;
+    setOpenChess();
+  }
 </script>
 </html>
