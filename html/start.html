@@ -52,7 +52,7 @@
   import { pathName, randNumberWithMin, getSkillInfo, redirectToHome, serverError } from "../js/common.js";
   import { timeTo } from "../js/timer.js";
   import { showSkillEffect, activateEnemySkill, isPlayerMoveAgain, isEnemyMoveAgain,
-          setIsMoveAgain, isGameOver, audioEffect } from "../js/start.js";
+          setIsMoveAgain, isGameOver, playAudioEffect } from "../js/start.js";
   import { setChessBoardStore, getChessBoardStore, getPlayerInfo, getEnemyInfo,
           setPlayerScore, setEnemyScore, getActivateSkill, setActivateSkill,
           getAction, setAction, getOpenChess, setOpenChess, insertPlayer,
@@ -98,7 +98,7 @@
         cancelButtonText: "取消"
       }).then( async (result) => {
         if (result.value) { 
-          audioEffect("player-skill");
+          playAudioEffect("player-skill");
           $(".chess").addClass("disabled");
           $("#skill").addClass("activated");
           showSkillEffect(playerInfo.id);
@@ -234,7 +234,7 @@
   };
 
   const clickChess = (event) => {
-    audioEffect("flip");
+    playAudioEffect("flip");
     const ele = event.currentTarget;
     if (flipNumbers.length < 2 && !$(ele).hasClass("open")) {
       flipNumbers.push($(ele).data("chess"));
@@ -246,7 +246,7 @@
         const isEqual = a === b;
 
         if (isEqual) {
-          audioEffect("offset");
+          playAudioEffect("offset");
           $(".open").fadeTo(1000, 0);
           setPlayerScore();
 
@@ -281,7 +281,7 @@
     const enemyInfo = getEnemyInfo();
     if (chess == 0) {
       if (playerInfo.score == enemyInfo.score) {
-        audioEffect("draw");
+        playAudioEffect("draw");
         await Swal.fire({
           allowOutsideClick: false,
           html: `<div>
@@ -293,7 +293,7 @@
           redirectToHome();
         });
       } else if (playerInfo.score < enemyInfo.score) {
-        audioEffect("failure");
+        playAudioEffect("failure");
         await Swal.fire({
           allowOutsideClick: false,
           html: `<div>
@@ -308,7 +308,7 @@
           redirectToHome();
         });
       } else {
-        audioEffect("victory");
+        playAudioEffect("victory");
         await Swal.fire({
           allowOutsideClick: false,
           html: `<div>
@@ -326,7 +326,7 @@
           const result = await insertPlayer(message);
           if (result) {
             if (result?.data?.topFive) {
-              audioEffect("top-five");
+              playAudioEffect("top-five");
               Swal.fire({
                 html: `<img class="over" src="${pathName}images/brain.png"/>
                         <h2 style="margin-bottom:0">前五名達成！你的記憶力已經無人能忽視！</h2>`,
@@ -356,26 +356,14 @@
     const result = await activateEnemySkill();
 
     setTimeout(() => {
-      let randNumber = [];
-      const matchIndices = getMatchedIndicesByRate();
-
-      if (matchIndices) {
-        randNumber = matchIndices;
-      } else {
-        while (randNumber.length < 2) {
-          const randNum = randNumberWithMin(0, $(".chess").length - 1);
-          if (!randNumber.includes(randNum)) {
-            randNumber.push(randNum);
-          }
-        }
-      }
+      let randNumber = getMatchedIndicesByRate() || getRandomIndices();
 
       randNumber.forEach((randNum, index) => {
         const number = $(".chess").eq(randNum).data("chess");
         flipNumbers.push(number);
 
         setTimeout(() => {
-          audioEffect("flip");
+          playAudioEffect("flip");
           $(".chess").eq(randNum).addClass("open");
           setOpenChess(getOpenChessIndex());
         }, (index + 1) * 500);
@@ -386,47 +374,7 @@
       }
 
       setTimeout(() => {
-        const [a, b] = flipNumbers;
-        const isEqual = a === b;
-
-        if (isEqual) {
-          audioEffect("offset");
-          $(".open").fadeTo(1000, 0);
-          setEnemyScore();
-
-          setTimeout(() => {
-            $(".open").remove();
-            resetFlipState();
-            setChessBoardStore();
-            setPerspective();
-
-            if ($(".chess").length === 0) {
-              gameOver();
-            } else {
-              autoFlip();
-            }
-          }, 1000);
-        } else {
-          if (isEnemyMoveAgain) {
-            setIsMoveAgain(false, false);
-
-            setTimeout(() => {
-              $(".open").removeClass("open");
-              resetFlipState();
-              autoFlip();
-            }, 1000);
-          } else {
-            setTimeout(() => {
-              $(".open").removeClass("open");
-              resetFlipState();
-              $(".picture").eq(0).addClass("action");
-              $(".picture").eq(1).removeClass("action");
-              setAction(true);
-              $("img").removeClass("disabled");
-              $(".chess").removeClass("disabled");
-            }, 1000);
-          }
-        }
+        handleFlipResult();
       }, 1000);
     }, result.delayTime);
   };
@@ -453,6 +401,59 @@
 
     return null;
     }
+  
+  const getRandomIndices = () => {
+    const indices = [...Array($(".chess").length).keys()];
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    return indices.slice(0, 2);
+  };
+
+  const handleFlipResult = () => {
+    const [a, b] = flipNumbers;
+    const isEqual = a === b;
+
+    if (isEqual) {
+      playAudioEffect("offset");
+      $(".open").fadeTo(1000, 0);
+      setEnemyScore();
+
+      setTimeout(() => {
+        $(".open").remove();
+        resetFlipState();
+        setChessBoardStore();
+        setPerspective();
+
+        if ($(".chess").length === 0) {
+          gameOver();
+        } else {
+          autoFlip();
+        }
+      }, 1000);
+    } else {
+      if (isEnemyMoveAgain) {
+        setIsMoveAgain(false, false);
+
+        setTimeout(() => {
+          $(".open").removeClass("open");
+          resetFlipState();
+          autoFlip();
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          $(".open").removeClass("open");
+          resetFlipState();
+          $(".picture").eq(0).addClass("action");
+          $(".picture").eq(1).removeClass("action");
+          setAction(true);
+          $("img").removeClass("disabled");
+          $(".chess").removeClass("disabled");
+        }, 1000);
+      }
+    }
+  }
 
   const resetFlipState = () => {
     flipNumbers.length = 0;

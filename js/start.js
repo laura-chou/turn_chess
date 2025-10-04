@@ -48,26 +48,21 @@ const foresee = (isPlayer) => {
 };
 
 const perspective = () => {
-  let random4 = [];
-  while(random4.length < 4){
-    const randNum = randNumberWithMin(0, $('.chess').length - 1);
-    
-    if (random4.includes(randNum)) {
-      continue;
-    }
-    
-    const ele = $('.chess').eq(randNum);
-    if (ele.hasClass('perspective')) {
-      continue;
-    }
-    
-    random4.push(randNum);
-
-    setTimeout(() => {
-      audioEffect("flip");
-      $('.chess').eq(randNum).addClass('perspective');
-    }, random4.length * 500);
+  const totalChess = $(".chess").length;
+  const indices = [...Array(totalChess).keys()];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
   }
+
+  const random4 = indices.slice(0, 4);
+
+  random4.forEach((index, i) => {
+    setTimeout(() => {
+      playAudioEffect("flip");
+      $(".chess").eq(index).addClass("perspective");
+    }, i * 500);
+  });
 
   setPerspective(random4);
 
@@ -77,10 +72,10 @@ const perspective = () => {
 };
 
 const snoop = () => {
-  audioEffect("flip");
-  $('.chess').addClass('open');
+  playAudioEffect("flip");
+  $(".chess").addClass("open");
   setTimeout(()=>{
-    $('.chess').removeClass('open');
+    $(".chess").removeClass("open");
   },1000);
 
   setTimeout(()=> {
@@ -107,7 +102,7 @@ const stopPlayer = () => {
 };
 
 const swapChess = () => {
-  const elements = $('td').toArray();
+  const elements = $("td").toArray();
   const shuffledContents = elements
     .map(ele => $(ele).html())
     .sort(() => 0.5 - Math.random());
@@ -119,8 +114,8 @@ const swapChess = () => {
 
 const openRandomChess = (isPlayer = false) => {
   let numberArray = [];
-  for (let i = 0; i < $('.chess').length; i++) {
-    numberArray.push($('.chess').eq(i).data('chess'));
+  for (let i = 0; i < $(".chess").length; i++) {
+    numberArray.push($(".chess").eq(i).data("chess"));
   }
 
   const duplicateChessIndex  = numberArray.reduce((acc, value, index) => {
@@ -136,18 +131,18 @@ const openRandomChess = (isPlayer = false) => {
 
   duplicateChessIndex.forEach((number, index) => {
     setTimeout(() => {
-      audioEffect("flip");
-      $('.chess').eq(number).addClass('foresee');
+      playAudioEffect("flip");
+      $(".chess").eq(number).addClass("foresee");
     }, (index + 1) * 500);
   });
 
   setTimeout(() => {
-    audioEffect("offset");
-    $('.foresee').fadeTo(1000, 0);
+    playAudioEffect("offset");
+    $(".foresee").fadeTo(1000, 0);
   }, 1250);
 
   setTimeout(() => {
-    $('.foresee').remove();
+    $(".foresee").remove();
     isPlayer ? setPlayerScore() : setEnemyScore();
   }, 2000);
 
@@ -176,7 +171,7 @@ const validateSkillActivation = () => {
       case 5:
         if (playerInfo.score >= 5) {
           isActive = true;
-          delayTime = 5500;
+          delayTime = 6000;
         }
         break;
       case 6:
@@ -204,16 +199,16 @@ export const activateEnemySkill = async () => {
   if (validate.isActive) {
     timeTo("stop");
     await Swal.fire({
+      icon: "warning",
       title: `${enemyInfo.name}即將發動技能`,
-      html: `<div class='skill-info'>
+      html: `<div class="skill-info">
               <p>技能:${skillInfo.skill}</p>
               <p>${skillInfo.desc}</p>
             </div>`,
-      icon: 'warning',
       allowOutsideClick: false,
-      confirmButtonText: '確定'
+      confirmButtonText: "確定"
     }).then(() => {
-      audioEffect("enemy-skill");
+      playAudioEffect("enemy-skill");
       showSkillEffect(enemyInfo.skill, false);
       setActivateSkill(false);
       isActivateEnemySkill = true;
@@ -226,27 +221,27 @@ export const activateEnemySkill = async () => {
 export const showSkillEffect = async (id, isPlayer = true) => {
   const index = isPlayer ? 0 : 1;
   const skillInfo = await getSkillInfo(id);
-  $('.skill-name').eq(index).text(skillInfo.skill);
-  $('.picture img').eq(index).addClass("disappear");
-  $('.skill-name').eq(index).removeClass("disappear");
+  $(".skill-name").eq(index).text(skillInfo.skill);
+  $(".picture img").eq(index).addClass("disappear");
+  $(".skill-name").eq(index).removeClass("disappear");
   var data = {
     in: { 
       effect: "bounceIn",
       callback: () => {
-        $('.skill-name').eq(index).addClass("disappear")
-        $('.picture img').eq(index).removeClass("disappear")
+        $(".skill-name").eq(index).addClass("disappear")
+        $(".picture img").eq(index).removeClass("disappear")
         activateSkill(id, isPlayer)
       }
     }
   };
-  $('.skill-name').eq(index).textillate(data);
+  $(".skill-name").eq(index).textillate(data);
 };
 
 export const isGameOver = () => {
   return $(".chess").length == 0
 }
 
-export const audioEffect = (src) => {
+export const playAudioEffect = (src) => {
   const audio = new Audio();
   audio.src = `${pathName}music/${src}.mp3`;
   audio.play();
