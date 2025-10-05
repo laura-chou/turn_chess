@@ -320,28 +320,30 @@
                   </div>
                   <img src="${pathName}images/player${playerInfo.id}.png"/>
                 </div>`,
-          confirmButtonText: "確定"
-        }).then(async () => {
-          const message = $("#message-input").val().trim();
-          const result = await insertPlayer(message);
-          if (result) {
-            if (result?.data?.topFive) {
-              playAudioEffect("top-five");
-              Swal.fire({
-                html: `<img class="over" src="${pathName}images/brain.png"/>
-                        <h2 style="margin-bottom:0">前五名達成！你的記憶力已經無人能忽視！</h2>`,
-                allowOutsideClick: false,
-                confirmButtonText: "確定"
-              }).then(result => {
+          confirmButtonText: "確定",
+          showLoaderOnConfirm: true,
+          preConfirm: async () => {
+            const message = $("#message-input").val().trim();
+            const response = await insertPlayer(message);
+            if (response) {
+              if (response?.data?.topFive) {
+                playAudioEffect("top-five");
+                Swal.fire({
+                  html: `<img class="over" src="${pathName}images/brain.png"/>
+                          <h2 style="margin-bottom:0">前五名達成！你的記憶力已經無人能忽視！</h2>`,
+                  allowOutsideClick: false,
+                  confirmButtonText: "確定"
+                }).then(result => {
+                  redirectToHome();
+                });
+              } else {
                 redirectToHome();
-              });
+              }
             } else {
-              redirectToHome();
+              serverError();
             }
-          } else {
-            serverError();
-          }
-        })
+          },
+        });
       }
     }
   });
