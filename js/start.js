@@ -1,4 +1,4 @@
-import { pathName, randNumberWithMin, getSkillInfo } from "../js/common.js";
+import { pathName, getSkillInfo } from "../js/common.js";
 import { getPlayerInfo, getEnemyInfo, setPlayerScore, setEnemyScore,
   getActivateSkill, setActivateSkill, setPerspective } from "../js/store.js";
 import { timeTo } from "../js/timer.js";

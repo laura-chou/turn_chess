@@ -29,11 +29,6 @@ const randNumber = (max) => {
   return Math.round(random);
 };
 
-export const randNumberWithMin = (min, max) => {
-  const random = Math.random() * (max - min) + min;
-  return Math.round(random);
-};
-
 const enemyInfo =  await readJsonFile(`${getPathName()}json/enemyInfo.json`);
 
 export const getRandEnemy = () => {
